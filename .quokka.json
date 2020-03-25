@@ -1,0 +1,12 @@
+{
+  "ts": {
+    "path": "...typescript"
+  },
+  "node": "~/.nvm/current/bin/node",
+  "recycle": true,
+  "env": {
+    "params": {
+      "env": "NODE_PATH=./src"
+    }
+  }
+}

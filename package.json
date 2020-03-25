@@ -1,0 +1,76 @@
+{
+  "name": "ts-project-starter",
+  "version": "1.5.0",
+  "main": "src/index.ts",
+  "author": "suddenlyGiovanni <ravalico.giovanni@gmail.com>",
+  "license": "MIT",
+  "description": "My highly opinionated starting point for any TypeScript project",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suddenlyGiovanni/boilerplate--ts_project_starter"
+  },
+  "bugs": {
+    "url": "https://github.com/suddenlyGiovanni/boilerplate--ts_project_starter/issues"
+  },
+  "homepage": "https://github.com/suddenlyGiovanni/boilerplate--ts_project_starter",
+  "devDependencies": {
+    "@commitlint/cli": "8.3.5",
+    "@commitlint/config-conventional": "8.3.4",
+    "@types/jest": "25.1.4",
+    "@typescript-eslint/eslint-plugin": "2.25.0",
+    "@typescript-eslint/parser": "2.25.0",
+    "commitizen": "4.0.3",
+    "commitlint": "8.3.5",
+    "cz-conventional-changelog": "3.1.0",
+    "dtslint": "3.4.0",
+    "eslint": "6.8.0",
+    "eslint-config-airbnb-typescript": "7.2.0",
+    "eslint-config-prettier": "6.10.1",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-jest": "23.8.2",
+    "eslint-plugin-prettier": "3.1.2",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-sonarjs": "0.5.0",
+    "eslint-plugin-unicorn": "17.2.0",
+    "husky": "4.2.3",
+    "jest": "25.1.0",
+    "precise-commits": "1.0.2",
+    "prettier": "2.0.2",
+    "ts-jest": "25.2.1",
+    "ts-node": "8.8.1",
+    "ts-node-dev": "1.0.0-pre.44",
+    "typescript": "3.8.3"
+  },
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpileOnly  --inspect -- src/index.ts",
+    "prod": "npm run build && node .src/lib/index.js",
+    "build": "tsc -p .",
+    "build:watch": "npm run build -- -w",
+    "cz": "git-cz",
+    "lint": "eslint \"src/**\"",
+    "format:base": "prettier --parser typescript",
+    "format:check": "npm run format:base -- --list-different \"src/**/*.{ts,tsx}\"",
+    "format:write": "npm run format:base -- --write \"src/**/*.{ts,tsx}\"",
+    "typecheck": "tsc --project tsconfig.json --incremental false --noEmit ",
+    "test": "jest",
+    "test-types": "dtslint --expectOnly --localTs node_modules/typescript/lib types",
+    "clean": "rm -rf lib",
+    "purge-node_modules": "rm -rf node_modules"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "./node_modules/.bin/commitlint -e $HUSKY_GIT_PARAMS",
+      "pre-commit": "precise-commits"
+    }
+  }
+}
