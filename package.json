@@ -1,18 +1,18 @@
 {
-  "name": "ts-project-starter",
-  "version": "1.5.0",
+  "name": "yet-another-json-parser",
+  "version": "0.0.1",
   "main": "src/index.ts",
   "author": "suddenlyGiovanni <ravalico.giovanni@gmail.com>",
   "license": "MIT",
-  "description": "My highly opinionated starting point for any TypeScript project",
+  "description": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/suddenlyGiovanni/boilerplate--ts_project_starter"
+    "url": "https://github.com/suddenlyGiovanni/yet-another-json-parser"
   },
   "bugs": {
-    "url": "https://github.com/suddenlyGiovanni/boilerplate--ts_project_starter/issues"
+    "url": "https://github.com/suddenlyGiovanni/yet-another-json-parser/issues"
   },
-  "homepage": "https://github.com/suddenlyGiovanni/boilerplate--ts_project_starter",
+  "homepage": "https://github.com/suddenlyGiovanni/yet-another-json-parser",
   "devDependencies": {
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
