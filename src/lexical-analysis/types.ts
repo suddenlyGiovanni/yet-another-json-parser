@@ -1,4 +1,9 @@
-export enum StructuralTokens {
+export const enum SyntaxKind {
+  /**
+   * JSON Structural Tokens
+   * LeftSquareBracket | LeftCurlyBracket | RightSquareBracket | RightCurlyBracket | Colon | Comma
+   */
+
   /**
    * token: `[`
    * description: left square bracket
@@ -40,9 +45,12 @@ export enum StructuralTokens {
    * unicode: `U+002C`
    */
   Comma,
-}
 
-export enum LiteralNameTokens {
+  /**
+   * JSON Literal NameTokens:
+   * True | False | Null
+   */
+
   /**
    * token: `true`
    * description: boolean type `true`
@@ -62,9 +70,12 @@ export enum LiteralNameTokens {
    * unicode: `U+006E` + `U+0075` + `U+006C` + `U+006C`
    */
   Null,
-}
 
-export enum WhiteSpaceTokens {
+  /**
+   * WhiteSpaceTokens
+   * CharacterTabulation | LineFeed | CarriageReturn | Space
+   */
+
   /**
    * token: `\t`
    * description: character tabulation
@@ -93,3 +104,14 @@ export enum WhiteSpaceTokens {
    */
   Space,
 }
+
+export type JSONValueGrammar =
+  | SyntaxKind.LeftSquareBracket
+  | SyntaxKind.LeftCurlyBracket
+  | SyntaxKind.RightSquareBracket
+  | SyntaxKind.RightCurlyBracket
+  | SyntaxKind.Colon
+  | SyntaxKind.Comma
+  | SyntaxKind.True
+  | SyntaxKind.False
+  | SyntaxKind.Null
