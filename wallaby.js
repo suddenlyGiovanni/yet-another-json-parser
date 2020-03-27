@@ -54,8 +54,10 @@ module.exports = function wallabyConfig(wallaby) {
       },
     ],
 
+
     lowCoverageThreshold: 80,
     reportConsoleErrorAsError: true,
+    runMode: 'onsave',
     testFramework: 'jest',
     tests: ['src/**/*.spec.ts', 'src/**/*.test.ts'],
   }

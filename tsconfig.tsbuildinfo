@@ -178,16 +178,44 @@
         "signature": "d96fa8a56871904776165ceb8e00bd56127e1a017bb2664cae76223b5f815141"
       },
       "./types/index.d.ts": {
-        "version": "c6041f8d6a60037aaa7c4ad32f1e0eb21c9d98284001ed1802a81e93b92bda4f",
-        "signature": "c6041f8d6a60037aaa7c4ad32f1e0eb21c9d98284001ed1802a81e93b92bda4f"
+        "version": "27602f8c3afe646e0d001c094578ec057b9063de7a877cb74058b36658ed7595",
+        "signature": "27602f8c3afe646e0d001c094578ec057b9063de7a877cb74058b36658ed7595"
       },
       "./src/index.ts": {
         "version": "e9f00cf606c82fd480e9763c2a8bdbdb45cf615cac9c4de5f65f031a5929eaa5",
         "signature": "9b99313984c061634e98d880144b501e91a8d245f5dcadc1cce145ea8e24033b"
       },
       "./src/index.test.ts": {
-        "version": "1c9ae21dde66fa54ce6d767fc3632efd882ac74b2c46f4c1d804462da064af32",
+        "version": "bf90d205cfa41e1684ff242975845548d9630cfcf33e77e739ca8dc336a534cc",
         "signature": "8b8ff3ac6a533fdfd68ca0f9c056c4a0f88dd9cd14c972d61ed643a7bcf7a887"
+      },
+      "./src/lexical-analysis/identify.ts": {
+        "version": "8e1442eee1541f7707cd9873c5b521bf6b47b5d7968acaf13b8468d398851fea",
+        "signature": "96d4b98885c72f521da788aa138e0ca9c75a29261294388f253d6b295f9402d1"
+      },
+      "./src/lexical-analysis/types.ts": {
+        "version": "353d3996fc8dc9eb69186939001ab476fe21ec5f19942ae04a67cee130b59881",
+        "signature": "0c84d6c8962b801c7884fd23b0cc2c87d816d67409fcda651ae963b82f25aa1d"
+      },
+      "./src/lexical-analysis/lexer.ts": {
+        "version": "fc604a1a2372681d8a1f67e79fed78bf4d7c8aeb6a4584458b2beaa088d17a38",
+        "signature": "828bb2df1df9b817d86f68ce071f5e549bba6a6d99fb68073ce4fc2f0cebc2f3"
+      },
+      "./src/lexical-analysis/__tests__/identify.test.ts": {
+        "version": "f4dd0039d23f26ab1130b5f5a6994f3226cfa3598a4bf15d7c38db408b9cf0a8",
+        "signature": "5d7ce2daeada052a2e430325fb31edbdcbe3b46dfb1cb2d9d56eb1b883315177"
+      },
+      "./src/lexical-analysis/__tests__/lexer.spec.ts": {
+        "version": "ac6d21e6e3a46523a4ce067ccf48d984afcfd6aefc1ac0fab16831d5ce464c97",
+        "signature": "07117b588af70f7cc6228952871dab33fcd7f544dd8e83db0336883409f8346f"
+      },
+      "./src/utils/create-map.ts": {
+        "version": "cf3f2cdf4f124b4d6b14e306db39d61d30774e2efa3eb1854854b2db0cb8861e",
+        "signature": "9e3dcb37f88394d3a4610e556b6bba9595b0132719995a454c6672314c1bb8eb"
+      },
+      "./src/utils/__tests__/create-map-from-template.test.ts": {
+        "version": "8a986bbde00a8e0b580e40d6dbda12e4ac862c7faea6191b7b6012045169a3cb",
+        "signature": "6e44ff5be5090657e4f9179ccbf699d73bc2f0c024ded917318b46ed1305a283"
       },
       "./node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts": {
         "version": "9a605b7e5de905b5e67ef1dfc7fb6956275ee3f1744ded5fd314ee8b8befe7d0",
@@ -261,6 +289,21 @@
         "./types/index.d.ts",
         "./src/index.ts"
       ],
+      "./src/lexical-analysis/lexer.ts": [
+        "./types/index.d.ts",
+        "./src/lexical-analysis/types.ts"
+      ],
+      "./src/lexical-analysis/__tests__/identify.test.ts": [
+        "./src/lexical-analysis/identify.ts"
+      ],
+      "./src/lexical-analysis/__tests__/lexer.spec.ts": [
+        "./types/index.d.ts",
+        "./src/lexical-analysis/lexer.ts",
+        "./src/lexical-analysis/types.ts"
+      ],
+      "./src/utils/__tests__/create-map-from-template.test.ts": [
+        "./src/utils/create-map.ts"
+      ],
       "./node_modules/@types/jest/node_modules/jest-diff/build/difflines.d.ts": [
         "./node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
         "./node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts"
@@ -284,40 +327,34 @@
       ]
     },
     "exportedModulesMap": {
+      "./node_modules/@types/jest/node_modules/jest-diff/build/difflines.d.ts": [
+        "./node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
+        "./node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts"
+      ],
+      "./node_modules/@types/jest/node_modules/jest-diff/build/printdiffs.d.ts": [
+        "./node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
+        "./node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts"
+      ],
       "./node_modules/@types/jest/node_modules/jest-diff/build/index.d.ts": [
         "./node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
         "./node_modules/@types/jest/node_modules/jest-diff/build/difflines.d.ts",
         "./node_modules/@types/jest/node_modules/jest-diff/build/printdiffs.d.ts",
         "./node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts"
       ],
+      "./node_modules/@types/jest/node_modules/pretty-format/build/index.d.ts": [
+        "./node_modules/@types/jest/node_modules/pretty-format/build/types.d.ts"
+      ],
       "./node_modules/@types/jest/index.d.ts": [
         "./node_modules/@types/jest/node_modules/jest-diff/build/index.d.ts",
         "./node_modules/@types/jest/node_modules/pretty-format/build/index.d.ts"
       ],
-      "./node_modules/@types/jest/node_modules/jest-diff/build/printdiffs.d.ts": [
-        "./node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
-        "./node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts"
-      ],
-      "./node_modules/@types/jest/node_modules/jest-diff/build/difflines.d.ts": [
-        "./node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
-        "./node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts"
-      ],
-      "./node_modules/@types/jest/node_modules/pretty-format/build/index.d.ts": [
-        "./node_modules/@types/jest/node_modules/pretty-format/build/types.d.ts"
+      "./src/lexical-analysis/lexer.ts": [
+        "./types/index.d.ts",
+        "./src/lexical-analysis/types.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "./types/index.d.ts",
-      "./src/index.ts",
-      "./src/index.test.ts",
-      "./node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
-      "./node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts",
-      "./node_modules/@types/jest/node_modules/jest-diff/build/difflines.d.ts",
-      "./node_modules/@types/jest/node_modules/jest-diff/build/printdiffs.d.ts",
-      "./node_modules/@types/jest/node_modules/jest-diff/build/index.d.ts",
-      "./node_modules/@types/jest/node_modules/pretty-format/build/types.d.ts",
-      "./node_modules/@types/jest/node_modules/pretty-format/build/index.d.ts",
-      "./node_modules/@types/jest/index.d.ts",
+      "./node_modules/typescript/lib/lib.es5.d.ts",
       "./node_modules/typescript/lib/lib.es2015.d.ts",
       "./node_modules/typescript/lib/lib.es2016.d.ts",
       "./node_modules/typescript/lib/lib.es2017.d.ts",
@@ -325,8 +362,6 @@
       "./node_modules/typescript/lib/lib.es2019.d.ts",
       "./node_modules/typescript/lib/lib.es2020.d.ts",
       "./node_modules/typescript/lib/lib.esnext.d.ts",
-      "./node_modules/typescript/lib/lib.esnext.full.d.ts",
-      "./node_modules/typescript/lib/lib.es5.d.ts",
       "./node_modules/typescript/lib/lib.dom.d.ts",
       "./node_modules/typescript/lib/lib.dom.iterable.d.ts",
       "./node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
@@ -361,7 +396,26 @@
       "./node_modules/typescript/lib/lib.es2020.symbol.wellknown.d.ts",
       "./node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "./node_modules/typescript/lib/lib.esnext.string.d.ts",
-      "./node_modules/typescript/lib/lib.esnext.promise.d.ts"
+      "./node_modules/typescript/lib/lib.esnext.promise.d.ts",
+      "./node_modules/typescript/lib/lib.esnext.full.d.ts",
+      "./src/index.ts",
+      "./node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
+      "./node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts",
+      "./node_modules/@types/jest/node_modules/jest-diff/build/difflines.d.ts",
+      "./node_modules/@types/jest/node_modules/jest-diff/build/printdiffs.d.ts",
+      "./node_modules/@types/jest/node_modules/jest-diff/build/index.d.ts",
+      "./node_modules/@types/jest/node_modules/pretty-format/build/types.d.ts",
+      "./node_modules/@types/jest/node_modules/pretty-format/build/index.d.ts",
+      "./node_modules/@types/jest/index.d.ts",
+      "./types/index.d.ts",
+      "./src/lexical-analysis/lexer.ts",
+      "./src/index.test.ts",
+      "./src/lexical-analysis/identify.ts",
+      "./src/lexical-analysis/__tests__/identify.test.ts",
+      "./src/lexical-analysis/types.ts",
+      "./src/utils/create-map.ts",
+      "./src/utils/__tests__/create-map-from-template.test.ts",
+      "./src/lexical-analysis/__tests__/lexer.spec.ts"
     ]
   },
   "version": "3.9.0-beta"

@@ -15,11 +15,13 @@ describe('add', () => {
 })
 
 // @ts-ignore
-const condFirstArgument: AssertEqual<typeof add, (x: number) => any> = true
+const condFirstArgument: AssertEqual<typeof add, (x: number) => unknown> = true
+
 // @ts-ignore
 const condRetunrCurry: AssertEqual<
   ReturnType<typeof add>,
-  (y: number) => any
+  (y: number) => unknown
 > = true
+
 // @ts-ignore
 const condReturn: AssertEqual<ReturnType<ReturnType<typeof add>>, number> = true
