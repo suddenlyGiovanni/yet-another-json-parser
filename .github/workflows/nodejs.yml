@@ -10,15 +10,19 @@ on:
       - 'develop' 
       - 'feature/**'
   pull_request:
-    branches: [ master, develop ]
+    branches: 
+      - 'master'
+      - 'develop'
+      - 'feature/**'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
+
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
@@ -26,6 +30,9 @@ jobs:
 
     - name: Install dependencies
       run: yarn install --frozen-lockfile
+
+    - name: Compile TypeScript
+      run: yarn run build --if-present
 
     - name: Test source code
       run: yarn run test
