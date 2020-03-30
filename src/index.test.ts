@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { AssertEqual } from '../types'
 
@@ -13,9 +14,12 @@ describe('add', () => {
   })
 })
 
+// @ts-ignore
 const condFirstArgument: AssertEqual<typeof add, (x: number) => any> = true
+// @ts-ignore
 const condRetunrCurry: AssertEqual<
   ReturnType<typeof add>,
   (y: number) => any
 > = true
+// @ts-ignore
 const condReturn: AssertEqual<ReturnType<ReturnType<typeof add>>, number> = true
