@@ -199,5 +199,28 @@ describe('lexer', () => {
       expect(scanner.getToken()).toBe(SyntaxKind.WhitespaceTrivia)
       expect(scanner.getTextPos()).toBe(textWithWhiteSpaces.lastIndexOf('with'))
     })
+
+    it('should return `StringLiteral` when it encounters a string identified by double quotes', () => {
+      // arrange
+      expect.hasAssertions()
+      /**
+       * @example ` : "this is a \t \n \v \f \r 'string'",`
+       */
+      const text = `: "this is a \\t \\n \\v \\f \\r 'string'",`
+      const onError = setUpOnError()
+      const start = text.indexOf('"')
+      const end = text.length
+      const scanner = new Lexer(text, onError, start, end)
+
+      // act
+      scanner.scan() // ?
+
+      // assert
+      expect(scanner.getToken()).toBe(SyntaxKind.StringLiteral)
+      expect(scanner.getTokenValue()).toBe(`this is a \t \n \v \f \r 'string'`)
+      expect(scanner.getTextPos()).toBe(
+        text.lastIndexOf(`'string'`) + `'string'`.length + 1
+      )
+    })
   })
 })

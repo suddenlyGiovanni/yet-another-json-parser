@@ -113,6 +113,12 @@ export const enum SyntaxKind {
    * unicode code point: `U+0020`
    */
   Space,
+
+  // Literals
+
+  NumericLiteral,
+
+  StringLiteral,
 }
 
 export type JSONValueGrammar =
