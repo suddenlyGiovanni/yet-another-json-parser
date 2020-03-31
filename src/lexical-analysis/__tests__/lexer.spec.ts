@@ -181,5 +181,23 @@ describe('lexer', () => {
       expect(scanner.getToken()).toBe(SyntaxKind.NewLineTrivia)
       expect(scanner.scan()).toBe(SyntaxKind.EndOfFileToken)
     })
+
+    it('should return `WhitespaceTrivia` if it encounter an Insignificant whitespace', () => {
+      // arrange
+      expect.hasAssertions()
+      const onError = setUpOnError()
+
+      const textWithWhiteSpaces = 'text  \f\v\twith whites space'
+      const initialPos = textWithWhiteSpaces.lastIndexOf('text') + 'text'.length
+      const end = textWithWhiteSpaces.length
+      const scanner = new Lexer(textWithWhiteSpaces, onError, initialPos, end)
+
+      // act
+      scanner.scan()
+
+      // assert
+      expect(scanner.getToken()).toBe(SyntaxKind.WhitespaceTrivia)
+      expect(scanner.getTextPos()).toBe(textWithWhiteSpaces.lastIndexOf('with'))
+    })
   })
 })

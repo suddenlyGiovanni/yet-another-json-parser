@@ -5,6 +5,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CharacterCodes, JSONText, TokenFlags } from '../../types'
 
+import {
+  isCarriageReturnChr,
+  isCharacterTabulationChr,
+  isLineFeedChr,
+  isSpaceChr,
+} from 'lexical-analysis/identify'
 import { SyntaxKind } from 'lexical-analysis/types'
 
 export type ErrorCallback = (message: string, length: number) => void
@@ -86,7 +92,7 @@ export class Lexer {
     return this.tokenFlags === TokenFlags.PrecedingLineBreak
   }
 
-  scan(): SyntaxKind {
+  public scan(): SyntaxKind {
     this.startPos = this.pos
     // eslint-disable-next-line no-constant-condition
     // eslint-disable-next-line sonarjs/no-one-iteration-loop
@@ -112,9 +118,9 @@ export class Lexer {
         case CharacterCodes.carriageReturn:
           this.tokenFlags = TokenFlags.PrecedingLineBreak
           if (
-            ch === CharacterCodes.carriageReturn &&
+            isCarriageReturnChr(ch) &&
             this.pos + 1 < this.end &&
-            this.text.charCodeAt(this.pos + 1) === CharacterCodes.lineFeed
+            isLineFeedChr(this.text.charCodeAt(this.pos + 1))
           ) {
             // consume both CR and LF
             this.pos += 2
@@ -125,8 +131,21 @@ export class Lexer {
           this.token = SyntaxKind.NewLineTrivia
           return this.token
 
+        case CharacterCodes.tab:
+        case CharacterCodes.verticalTab:
+        case CharacterCodes.space:
+        case CharacterCodes.formFeed:
+          while (
+            this.pos < this.end &&
+            this.isWhiteSpaceSingleLine(this.codePointAt(this.text, this.pos))
+          ) {
+            this.pos += 1
+          }
+          this.token = SyntaxKind.WhitespaceTrivia
+          return this.token
+
         default:
-          // TODO: Remove this slip
+          // TODO: Remove this Fall through console log
           // eslint-disable-next-line no-console
           console.log(
             `could not match unicode position (${ch}) equivalent to character (${String.fromCharCode(
@@ -139,6 +158,23 @@ export class Lexer {
           return this.token
       }
     }
+  }
+
+  private isWhiteSpaceSingleLine(ch: number): boolean {
+    return (
+      isSpaceChr(ch) ||
+      isCharacterTabulationChr(ch) ||
+      ch === CharacterCodes.verticalTab ||
+      ch === CharacterCodes.formFeed ||
+      ch === CharacterCodes.nonBreakingSpace ||
+      ch === CharacterCodes.nextLine ||
+      ch === CharacterCodes.ogham ||
+      (ch >= CharacterCodes.enQuad && ch <= CharacterCodes.zeroWidthSpace) ||
+      ch === CharacterCodes.narrowNoBreakSpace ||
+      ch === CharacterCodes.mathematicalSpace ||
+      ch === CharacterCodes.ideographicSpace ||
+      ch === CharacterCodes.byteOrderMark
+    )
   }
 
   private error(message: string): void
