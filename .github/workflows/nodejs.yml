@@ -7,10 +7,10 @@ on:
   push:
     branches:
       - 'master'
-      - 'develop' 
+      - 'develop'
       - 'feature/*'
   pull_request:
-    branches: 
+    branches:
       - 'master'
       - 'develop'
       - 'feature/*'
@@ -20,37 +20,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    
-   
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '13.x'
-   
-    - name: Get yarn cache directory path
-      id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
-    
-    - name: Cache node modules
-      uses: actions/cache@v1
-      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-      with:
-        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Install Dependencies
-      run: yarn install --frozen-lockfile
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
 
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
 
-    - name: Compile TypeScript
-      run: yarn run build
+      - name: Cache node modules
+        uses: actions/cache@v1
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
-    - name: Test
-      run: yarn run test
-      env:
-        CI: true
-    
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Compile TypeScript
+        run: yarn run build
+
+      - name: Test
+        run: yarn run test --collect-coverage
+        env:
+          CI: true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage/clover.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
