@@ -8,12 +8,12 @@ on:
     branches:
       - 'master'
       - 'develop' 
-      - 'feature/**'
+      - 'feature/*'
   pull_request:
     branches: 
       - 'master'
       - 'develop'
-      - 'feature/**'
+      - 'feature/*'
 
 jobs:
   build:
@@ -22,19 +22,34 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
+    
+   
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
         node-version: '13.x'
+   
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    
+    - name: Cache node modules
+      uses: actions/cache@v1
+      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
 
-    - name: Install dependencies
+    - name: Install Dependencies
       run: yarn install --frozen-lockfile
+
 
     - name: Compile TypeScript
       run: yarn run build
 
-    - name: Test source code
+    - name: Test
       run: yarn run test
       env:
         CI: true
