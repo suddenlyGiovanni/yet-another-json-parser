@@ -4,6 +4,8 @@
 /* eslint-disable @typescript-eslint/prefer-includes */
 // import { SyntaxKind } from './types'
 
+import { CharacterCodes } from '../../types'
+
 /**
  * token: `[`
  * description: left square bracket
@@ -98,40 +100,99 @@ export function isLeftSquareBracketToken(character: string): boolean {
   return LEFT_SQUARE_BRACKET.test(character)
 }
 
+export function isLeftSquareBracketChr(
+  chrCodePoint: number
+): chrCodePoint is CharacterCodes.openBracket {
+  return chrCodePoint === CharacterCodes.openBracket
+}
 export function isRightSquareBracketToken(character: string): boolean {
   return RIGHT_SQUARE_BRACKET.test(character)
+}
+
+export function iRightSquareBracketChr(
+  chrCodePoint: number
+): chrCodePoint is CharacterCodes.closeBracket {
+  return chrCodePoint === CharacterCodes.closeBracket
 }
 
 export function isLeftCurlyBracketToken(character: string): boolean {
   return LEFT_CURLY_BRACKET.test(character)
 }
 
+export function isLeftCurlyBracketChr(
+  chrCodePoint: number
+): chrCodePoint is CharacterCodes.openBrace {
+  return chrCodePoint === CharacterCodes.openBrace
+}
+
 export function isRightCurlyBracketToken(character: string): boolean {
   return RIGHT_CURLY_BRACKET.test(character)
+}
+
+export function isRightCurlyBracketChr(
+  chrCodePoint: number
+): chrCodePoint is CharacterCodes.closeBrace {
+  return chrCodePoint === CharacterCodes.closeBrace
 }
 
 export function isColonToken(character: string): boolean {
   return COLON.test(character)
 }
 
+export function isColonChr(
+  chrCodePoint: number
+): chrCodePoint is CharacterCodes.colon {
+  return chrCodePoint === CharacterCodes.colon
+}
+
 export function isCommaToken(character: string): boolean {
   return COMMA.test(character)
+}
+
+export function isCommaChr(
+  chrCodePoint: number
+): chrCodePoint is CharacterCodes.comma {
+  return chrCodePoint === CharacterCodes.comma
 }
 
 export function isCharacterTabulationToken(character: string): boolean {
   return CHARACTER_TABULATION.test(character)
 }
 
+export function isCharacterTabulationChr(
+  chrCodePoint: number
+): chrCodePoint is CharacterCodes.tab {
+  return chrCodePoint === CharacterCodes.tab
+}
+
 export function isLineFeedToken(character: string): boolean {
   return LINE_FEED.test(character)
+}
+
+export function isLineFeedChr(
+  chrCodePoint: number
+): chrCodePoint is CharacterCodes.lineFeed {
+  return chrCodePoint === CharacterCodes.lineFeed
 }
 
 export function isCarriageReturnToken(character: string): boolean {
   return CARRIAGE_RETURN.test(character)
 }
 
+export function isCarriageReturnChr(
+  chrCodePoint: number
+): chrCodePoint is CharacterCodes.carriageReturn {
+  return chrCodePoint === CharacterCodes.carriageReturn
+}
+
 export function isSpaceToken(character: string): boolean {
   return SPACE.test(character)
+}
+
+export function isSpaceChr(
+  chrCodePoint: number
+): chrCodePoint is CharacterCodes.space {
+  return chrCodePoint === CharacterCodes.space
 }
 
 export function isTrueToken(characters: string): boolean {

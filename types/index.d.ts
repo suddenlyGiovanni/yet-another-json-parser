@@ -51,12 +51,18 @@ export const enum CharacterCodes {
   maxAsciiCharacter = 0x7f,
 
   /**
-   * @example \n
+   * @example
+   * escape chr: `\n`
+   * hexNumb: 0x0A
+   * decimal: 10
    */
   lineFeed = 0x0a,
 
   /**
-   * @example \r
+   * @example
+   * escape chr: `\r`
+   * hexNumb: 0x0D
+   * decimal: 13
    */
   carriageReturn = 0x0d,
   lineSeparator = 0x2028,
@@ -65,7 +71,10 @@ export const enum CharacterCodes {
 
   // Unicode 3.0 space characters
   /**
-   * @example " "
+   * @example
+   * escape chr: `\s`
+   * hexNumb: 0x0020
+   * decimal: 32
    */
   space = 0x0020,
   nonBreakingSpace = 0x00a0, //
@@ -155,173 +164,275 @@ export const enum CharacterCodes {
   Z = 0x5a,
 
   /**
-   * @example &
+   * @example
+   * chr: &
+   * hexNumb: 0x26
+   * decimal: 38
    */
   ampersand = 0x26,
 
   /**
-   * @example *
+   * @example
+   * chr: *
+   * hexNumb: 0x2a
+   * decimal: 42
    */
   asterisk = 0x2a,
 
   /**
-   * @example @
+   * @example
+   * chr: @
+   * hexNumb: 0x40
+   * decimal: 64
    */
   at = 0x40,
 
   /**
-   * @example \
+   * @example
+   * chr: \
+   * hexNumb: 0x5C
+   * decimal: 92
    */
   backslash = 0x5c,
 
   /**
-   * @example `
+   * @example
+   * chr: `
+   * hexNumb: 0x60
+   * decimal: 96
    */
   backtick = 0x60,
 
   /**
-   * @example |
+   * @example
+   * chr: |
+   * hexNumb: 0x7C
+   * decimal: 124
    */
   bar = 0x7c,
 
   /**
-   * @example ^
+   * @example
+   * chr: ^
+   * hexNumb: 0x5E
+   * decimal: 94
    */
   caret = 0x5e,
 
   /**
-   * @example }
+   * @example
+   * chr: }
+   * hexNumb: 0x7D
+   * decimal: 125
    */
   closeBrace = 0x7d,
 
   /**
-   * @example ]
+   * @example
+   * chr: ]
+   * hexNumb: 0x5D
+   * decimal: 93
    */
   closeBracket = 0x5d,
 
   /**
-   * @example )
+   * @example
+   * chr: )
+   * hexNumb: 0x29
+   * decimal: 41
    */
   closeParen = 0x29,
 
   /**
-   * @example :
+   * @example
+   * chr: :
+   * hexNumb: 0x3A
+   * decimal: 58
    */
   colon = 0x3a,
 
   /**
-   * @example ,
+   * @example
+   * chr: ,
+   * hexNumb: 0x2C
+   * decimal: 44
    */
   comma = 0x2c,
 
   /**
-   * @example .
+   * @example
+   * chr: .
+   * hexNumb: 0x2E
+   * decimal: 46
    */
   dot = 0x2e,
 
   /**
-   * @example "
+   * @example
+   * chr: "
+   * hexNumb: 0x22
+   * decimal: 34
    */
   doubleQuote = 0x22,
 
   /**
-   * @example =
+   * @example
+   * chr: =
+   * hexNumb: 0x3D
+   * decimal: 61
    */
   equals = 0x3d,
 
   /**
-   * @example !
+   * @example
+   * chr: !
+   * hexNumb: 0x21
+   * decimal: 33
    */
   exclamation = 0x21,
 
   /**
-   * @example >
+   * @example
+   * chr: >
+   * hexNumb: 0x3E
+   * decimal: 62
    */
   greaterThan = 0x3e,
 
   /**
-   * @example #
+   * @example
+   * chr: #
+   * hexNumb: 0x23
+   * decimal: 35
    */
   hash = 0x23,
 
   /**
-   * @example <
+   * @example
+   * chr: <
+   * hexNumb: 0x3C
+   * decimal: 60
    */
   lessThan = 0x3c,
 
   /**
-   * @example -
+   * @example
+   * chr: -
+   * hexNumb: 0x2D
+   * decimal: 45
    */
   minus = 0x2d,
 
   /**
-   * @example {
+   * @example
+   * chr: {
+   * hexNumb: 0x7B
+   * decimal: 123
    */
   openBrace = 0x7b,
 
   /**
-   * @example [
+   * @example
+   * chr: [
+   * hexNumb: 0x5B
+   * decimal: 91
    */
   openBracket = 0x5b,
 
   /**
-   * @example (
+   * @example
+   * chr: (
+   * hexNumb: 0x28
+   * decimal: 40
    */
   openParen = 0x28,
 
   /**
-   * @example %
+   * @example
+   * chr: %
+   * hexNumb: 0x25
+   * decimal: 37
    */
   percent = 0x25,
 
   /**
-   * @example +
+   * @example
+   * chr: +
+   * hexNumb: 0x2B
+   * decimal: 43
    */
   plus = 0x2b,
 
   /**
-   * @example ?
+   * @example
+   * chr: ?
+   * hexNumb: 0x3F
+   * decimal: 63
    */
   question = 0x3f,
 
   /**
-   * @example :
+   * @example
+   * chr: ;
+   * hexNumb: 0x3B
+   * decimal: 59
    */
   semicolon = 0x3b,
 
   /**
-   * @example '
+   * @example
+   * chr: '
+   * hexNumb: 0x27
+   * decimal: 39
    */
   singleQuote = 0x27,
 
   /**
-   * @example /
+   * @example
+   * chr: /
+   * hexNumb: 0x2F
+   * decimal: 47
    */
   slash = 0x2f,
 
   /**
-   * @example ~
+   * @example
+   * chr: ~
+   * hexNumb: 0x7E
+   * decimal: 126
    */
   tilde = 0x7e,
 
   /**
-   * @example \b
+   * @example
+   * escape chr: `\b`
+   * hexNumb: 0x08
+   * decimal: 8
    */
   backspace = 0x08,
 
   /**
-   * @example \f
+   * @example
+   * escape chr: `\f`
+   * hexNumb: 0x0C
+   * decimal: 12
    */
   formFeed = 0x0c,
   byteOrderMark = 0xfeff,
 
   /**
-   * @example \t
+   * @example
+   * escape chr: `\t`
+   * hexNumb: 0x09
+   * decimal: 9
    */
   tab = 0x09,
 
   /**
-   * @example \v
+   * @example
+   * escape chr: `\v`
+   * hexNumb: 0x0B
+   * decimal: 11
    */
   verticalTab = 0x0b,
 }
