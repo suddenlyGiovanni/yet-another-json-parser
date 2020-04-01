@@ -165,6 +165,11 @@ export class Lexer {
           this.token = SyntaxKind.LeftCurlyBracket
           return this.token
 
+        case CharacterCodes.closeBrace:
+          this.pos += 1
+          this.token = SyntaxKind.RightCurlyBracket
+          return this.token
+
         case CharacterCodes.doubleQuote:
           // TODO: enable this:
           this.tokenValue = this.scanString()
