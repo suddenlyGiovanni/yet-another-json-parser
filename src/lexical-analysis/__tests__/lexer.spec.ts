@@ -645,6 +645,17 @@ describe('lexer', () => {
           expect(scanner.getToken()).not.toBe(SyntaxKind.RightSquareBracket)
           expect(scanner.scan()).toBe(SyntaxKind.RightSquareBracket)
         })
+
+        it('should return `SyntaxKind.LeftCurlyBracket` when encountering a left curly bracket `{`', () => {
+          // arrange
+          expect.hasAssertions()
+          const scanner = new Lexer('{}')
+          // act
+          scanner.scan()
+          // assert
+          expect(scanner.getToken()).toBe(SyntaxKind.LeftCurlyBracket)
+          expect(scanner.scan()).not.toBe(SyntaxKind.LeftCurlyBracket)
+        })
       })
     })
   })

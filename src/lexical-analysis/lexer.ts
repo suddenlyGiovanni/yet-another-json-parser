@@ -149,6 +149,7 @@ export class Lexer {
           this.token = SyntaxKind.WhitespaceTrivia
           return this.token
 
+        //  structural tokens:
         case CharacterCodes.openBracket:
           this.pos += 1
           this.token = SyntaxKind.LeftSquareBracket
@@ -157,6 +158,11 @@ export class Lexer {
         case CharacterCodes.closeBracket:
           this.pos += 1
           this.token = SyntaxKind.RightSquareBracket
+          return this.token
+
+        case CharacterCodes.openBrace:
+          this.pos += 1
+          this.token = SyntaxKind.LeftCurlyBracket
           return this.token
 
         case CharacterCodes.doubleQuote:
