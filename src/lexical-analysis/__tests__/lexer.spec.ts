@@ -635,6 +635,16 @@ describe('lexer', () => {
           expect(scanner.scan()).not.toBe(SyntaxKind.LeftSquareBracket)
         })
 
+        it('should return `SyntaxKind.RightSquareBracket` when encountering a right square bracket `]`', () => {
+          // arrange
+          expect.hasAssertions()
+          const scanner = new Lexer('[]')
+          // act
+          scanner.scan()
+          // assert
+          expect(scanner.getToken()).not.toBe(SyntaxKind.RightSquareBracket)
+          expect(scanner.scan()).toBe(SyntaxKind.RightSquareBracket)
+        })
       })
     })
   })
