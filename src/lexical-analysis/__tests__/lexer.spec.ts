@@ -679,6 +679,20 @@ describe('lexer', () => {
           expect(scanner.scan()).toBe(SyntaxKind.Colon)
           expect(scanner.scan()).not.toBe(SyntaxKind.Colon)
         })
+
+        it('should return `SyntaxKind.Comma` when encountering a comma `,`', () => {
+          // arrange
+          expect.hasAssertions()
+          const text = '"key": "a, b, c",'
+          const scanner = new Lexer(text)
+          // assert
+          expect(scanner.scan()).not.toBe(SyntaxKind.Comma)
+          expect(scanner.scan()).not.toBe(SyntaxKind.Comma)
+          expect(scanner.scan()).toBe(SyntaxKind.WhitespaceTrivia)
+          expect(scanner.scan()).not.toBe(SyntaxKind.Comma)
+          expect(scanner.scan()).toBe(SyntaxKind.Comma)
+          expect(scanner.getTextPos()).toBe(text.length)
+        })
       })
     })
   })

@@ -175,6 +175,11 @@ export class Lexer {
           this.token = SyntaxKind.Colon
           return this.token
 
+        case CharacterCodes.comma:
+          this.pos += 1
+          this.token = SyntaxKind.Comma
+          return this.token
+
         case CharacterCodes.doubleQuote:
           // TODO: enable this:
           this.tokenValue = this.scanString()
