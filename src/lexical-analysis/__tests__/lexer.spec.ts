@@ -622,6 +622,20 @@ describe('lexer', () => {
           expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001f))
         })
       })
+
+      describe('structural tokens', () => {
+        it('should return `SyntaxKind.LeftSquareBracket` when encountering a left square bracket `[`', () => {
+          // arrange
+          expect.hasAssertions()
+          const scanner = new Lexer('[]')
+          // act
+          scanner.scan()
+          // assert
+          expect(scanner.getToken()).toBe(SyntaxKind.LeftSquareBracket)
+          expect(scanner.scan()).not.toBe(SyntaxKind.LeftSquareBracket)
+        })
+
+      })
     })
   })
 })

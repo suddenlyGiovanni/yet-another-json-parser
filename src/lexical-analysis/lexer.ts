@@ -149,6 +149,11 @@ export class Lexer {
           this.token = SyntaxKind.WhitespaceTrivia
           return this.token
 
+        case CharacterCodes.openBracket:
+          this.pos += 1
+          this.token = SyntaxKind.LeftSquareBracket
+          return this.token
+
         case CharacterCodes.doubleQuote:
           // TODO: enable this:
           this.tokenValue = this.scanString()
