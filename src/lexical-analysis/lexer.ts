@@ -256,25 +256,10 @@ export class Lexer {
         return '"'
 
       // TODO: implement UnicodeEscape
-      // case CharacterCodes.u:
-      //   /* '\u{DDDDDDDD}' */
-      //   if (
-      //     this.pos < this.end &&
-      //     isLeftCurlyBracketChr(this.codePointAt(this.text, this.pos))
-      //   ) {
-      //     this.pos += 1
-      //     this.tokenFlags = TokenFlags.ExtendedUnicodeEscape
-      //     return this.scanExtendedUnicodeEscape()
-      //   }
-
-      //   this.tokenFlags = TokenFlags.UnicodeEscape
-      //   /* '\uDDDD' */
-      //   return this.scanHexadecimalEscape(/* numDigits */ 4)
-
-      // TODO: implement hexadecimalEscape
-      // case CharacterCodes.x:
-      //   /* '\xDD' */
-      //   return this.scanHexadecimalEscape(/* numDigits */ 2)
+      case CharacterCodes.u:
+        this.tokenFlags = TokenFlags.UnicodeEscape
+        /* '\uDDDD' */
+        return this.scanHexadecimalEscape()
 
       // @ts-ignore
       case CharacterCodes.carriageReturn:
@@ -294,6 +279,71 @@ export class Lexer {
       default:
         return String.fromCharCode(ch)
     }
+  }
+
+  private scanHexadecimalEscape(): string {
+    const escapedValue = this.scanExactNumberOfHexDigits() // ?
+
+    if (escapedValue >= 0) {
+      return String.fromCharCode(escapedValue) // ?
+    }
+    this.error('Hexadecimal digit expected')
+    return ''
+  }
+
+  /**
+   * Scans the given number of hexadecimal digits in the text,
+   * returning -1 if the given number is unavailable.
+   */
+  private scanExactNumberOfHexDigits(): number {
+    const valueString = this.scanHexDigits()
+    return valueString ? parseInt(valueString, 16) : -1
+  }
+
+  private scanHexDigits(): string {
+    function isChValidHexDigitUpperCaseLetter(characterCode: number): boolean {
+      return (
+        characterCode >= CharacterCodes.A && characterCode <= CharacterCodes.F
+      )
+    }
+
+    function isChValidHexDigitLowerCaseLetter(characterCode: number): boolean {
+      return (
+        characterCode >= CharacterCodes.a && characterCode <= CharacterCodes.f
+      )
+    }
+
+    function isChValidHexDigitsNumber(characterCode: number): boolean {
+      return (
+        characterCode >= CharacterCodes._0 && characterCode <= CharacterCodes._9
+      )
+    }
+
+    function isChValidLowerCaseHexDigits(characterCode: number): boolean {
+      return (
+        isChValidHexDigitsNumber(characterCode) ||
+        isChValidHexDigitLowerCaseLetter(characterCode)
+      )
+    }
+
+    let valueChars: number[] = []
+    while (valueChars.length < 4) {
+      let ch = this.codePointAt(this.text, this.pos)
+      if (isChValidHexDigitUpperCaseLetter(ch)) {
+        const codePositionDistanceLowerToUppercase =
+          CharacterCodes.a - CharacterCodes.A
+        // standardize hex literals to lowercase
+        ch += codePositionDistanceLowerToUppercase
+      } else if (!isChValidLowerCaseHexDigits(ch)) {
+        break
+      }
+      valueChars.push(ch)
+      this.pos += 1
+    }
+    if (valueChars.length < 4) {
+      valueChars = []
+    }
+    return String.fromCharCode(...valueChars)
   }
 
   private isWhiteSpaceSingleLine(ch: number): boolean {
