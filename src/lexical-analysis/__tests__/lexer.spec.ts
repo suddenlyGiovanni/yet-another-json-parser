@@ -667,6 +667,18 @@ describe('lexer', () => {
           expect(scanner.getToken()).not.toBe(SyntaxKind.RightCurlyBracket)
           expect(scanner.scan()).toBe(SyntaxKind.RightCurlyBracket)
         })
+
+        it('should return `SyntaxKind.Colon` when encountering a colon `:`', () => {
+          // arrange
+          expect.hasAssertions()
+          const scanner = new Lexer(' : ')
+          // act
+          scanner.scan()
+          // assert
+          expect(scanner.getToken()).not.toBe(SyntaxKind.Colon)
+          expect(scanner.scan()).toBe(SyntaxKind.Colon)
+          expect(scanner.scan()).not.toBe(SyntaxKind.Colon)
+        })
       })
     })
   })
