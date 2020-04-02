@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/prefer-includes */
 // import { SyntaxKind } from './types'
 
-import { CharacterCodes } from '../../types'
+import { CharacterCodes } from 'types/index'
 
 /**
  * token: `[`

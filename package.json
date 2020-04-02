@@ -1,7 +1,8 @@
 {
   "name": "yet-another-json-parser",
   "version": "0.0.3",
-  "main": "src/index.ts",
+  "main": "lib/index",
+  "typings": "lib/index",
   "author": "suddenlyGiovanni <ravalico.giovanni@gmail.com>",
   "license": "MIT",
   "description": "",

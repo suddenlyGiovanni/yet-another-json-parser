@@ -5,20 +5,30 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { CharacterCodes, JSONText, TokenFlags } from '../../types'
-
 import {
   isCarriageReturnChr,
   isCharacterTabulationChr,
   isLineFeedChr,
   isSpaceChr,
 } from 'lexical-analysis/identify'
-import { SyntaxKind } from 'lexical-analysis/types'
+import { CharacterCodes, JSONText, MapLike, TokenFlags } from 'types/index'
+
+import { KeywordSyntaxKind, Scanner, SyntaxKind } from 'types/types'
+import { createMapFromTemplate } from 'utils/create-map'
 
 export type ErrorCallback = (message: string, length: number) => void
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const textToKeywordObject: MapLike<KeywordSyntaxKind> = {
+  false: SyntaxKind.FalseKeyword,
+  null: SyntaxKind.NullKeyword,
+  true: SyntaxKind.TrueKeyword,
+}
+
+const textToKeyword = createMapFromTemplate(textToKeywordObject)
+
 // TODO: class Lexer implements Scanner
-export class Lexer {
+export class Lexer implements Scanner {
   /** the raw string provided to the Lexer */
   private text!: string
 
@@ -43,7 +53,7 @@ export class Lexer {
   // @ts-ignore
   private tokenValue!: string
 
-  private readonly onError?: ErrorCallback
+  private onError?: ErrorCallback
 
   public constructor(
     textInitial?: JSONText,
@@ -54,6 +64,10 @@ export class Lexer {
     this.onError = onError
     this.setText(textInitial, start, length)
     this.tokenFlags = TokenFlags.None
+  }
+
+  setOnError(onError: ErrorCallback | undefined): void {
+    this.onError = onError
   }
 
   public setText(
@@ -82,16 +96,29 @@ export class Lexer {
     this.tokenValue = undefined!
   }
 
+  public getStartPos(): number {
+    return this.startPos
+  }
+
+  public getTokenPos(): number {
+    return this.tokenPos
+  }
+
   public getToken(): SyntaxKind {
     return this.token
   }
 
-  public getTokenFlags(): TokenFlags {
-    return this.tokenFlags
-  }
-
   public getTokenValue(): string {
     return this.tokenValue
+  }
+
+  public getTokenText(): string {
+    // eslint-disable-next-line unicorn/prefer-string-slice
+    return this.text.substring(this.tokenPos, this.pos)
+  }
+
+  public getTokenFlags(): TokenFlags {
+    return this.tokenFlags
   }
 
   public hasPrecedingLineBreak(): boolean {
@@ -111,7 +138,7 @@ export class Lexer {
         return this.token
       }
 
-      const ch: number = this.codePointAt(this.text, this.pos)
+      let ch: number = this.codePointAt(this.text, this.pos)
 
       console.log(
         `unicode position (${ch}) equivalent to character (${String.fromCharCode(
@@ -187,6 +214,23 @@ export class Lexer {
           return this.token
 
         default:
+          if (this.isIdentifierStart(ch)) {
+            this.pos += this.charSize(ch)
+            while (
+              this.pos < this.end &&
+              this.isIdentifierPart(
+                // eslint-disable-next-line no-cond-assign
+                (ch = this.codePointAt(this.text, this.pos))
+              )
+            ) {
+              this.pos += this.charSize(ch)
+              console.log('here', String.fromCharCode(ch)) // ?
+            }
+            // eslint-disable-next-line unicorn/prefer-string-slice
+            this.tokenValue = this.text.substring(this.tokenPos, this.pos)
+            this.token = this.getIdentifierToken()
+            return this.token
+          }
           // TODO: Remove this Fall through console log
           // eslint-disable-next-line no-console
           console.log(
@@ -310,6 +354,35 @@ export class Lexer {
       default:
         return String.fromCharCode(ch)
     }
+  }
+
+  private isIdentifierStart(ch: number): boolean {
+    return (
+      ch === CharacterCodes.t ||
+      ch === CharacterCodes.f ||
+      ch === CharacterCodes.n
+    )
+  }
+
+  private getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
+    // eslint-disable-next-line unicorn/prevent-abbreviations
+    const len = this.tokenValue.length
+    if (len >= 4 && len <= 5) {
+      const ch = this.tokenValue.charCodeAt(0)
+      if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
+        const keyword = textToKeyword.get(this.tokenValue)
+        if (keyword !== undefined) {
+          this.token = keyword
+          return this.token
+        }
+      }
+    }
+    this.token = SyntaxKind.Identifier
+    return this.token
+  }
+
+  private isIdentifierPart(ch: number): boolean {
+    return ch >= CharacterCodes.a && ch <= CharacterCodes.z
   }
 
   private scanHexadecimalEscape(): string {

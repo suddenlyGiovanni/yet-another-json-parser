@@ -1,3 +1,6 @@
+import { ErrorCallback } from 'lexical-analysis/lexer'
+import { TokenFlags } from 'types/index'
+
 export const enum SyntaxKind {
   /** Bottom type representing an unknown token */
   Unknown,
@@ -119,7 +122,19 @@ export const enum SyntaxKind {
   NumericLiteral,
 
   StringLiteral,
+
+  Identifier,
+
+  // Reserved words
+  TrueKeyword,
+  FalseKeyword,
+  NullKeyword,
 }
+
+export type KeywordSyntaxKind =
+  | SyntaxKind.TrueKeyword
+  | SyntaxKind.FalseKeyword
+  | SyntaxKind.NullKeyword
 
 export type JSONValueGrammar =
   | SyntaxKind.LeftSquareBracket
@@ -133,24 +148,49 @@ export type JSONValueGrammar =
   | SyntaxKind.Null
 
 export interface Scanner {
-  /** returns the start position of whitespace before current token */
+  /**
+   * returns the start position of whitespace before current token
+   * @returns {number}
+   * @memberof Scanner
+   */
   getStartPos(): number
 
-  /** returns the current Syntax Token  */
+  /**
+   * returns the current Syntax Token
+   * @returns {SyntaxKind}
+   * @memberof Scanner
+   */
   getToken(): SyntaxKind
 
-  /** returns the Start position of text of current token */
+  /**
+   * returns the current position (end position of text of current token)
+   * @returns {number}
+   * @memberof Scanner
+   */
+  getTextPos(): number
+
+  /**
+   * returns the Start position of text of current token
+   * @returns {number}
+   * @memberof Scanner
+   */
   getTokenPos(): number
 
-  /** returns the text representation of the current token */
+  /**
+   * returns the text representation of the current token
+   * @returns {string}
+   * @memberof Scanner
+   */
   getTokenText(): string
 
-  /** returns the current token value */
+  /**
+   * returns the current token value
+   * @returns {string}
+   * @memberof Scanner
+   */
   getTokenValue(): string
 
   // hasUnicodeEscape(): boolean
-
-  // hasExtendedUnicodeEscape(): boolean
 
   // hasPrecedingLineBreak(): boolean
 
@@ -160,25 +200,40 @@ export interface Scanner {
 
   // isUnterminated(): boolean
 
+  getTokenFlags(): TokenFlags
+
   /**
    * steps over the next Token,
    * updates Scanner internal state (position in the scan, current token details etc)
    * and returns the matching SyntaxKind
+   * @returns {SyntaxKind}
+   * @memberof Scanner
    */
   scan(): SyntaxKind
 
-  /** returns the whole text passed to the scanner */
+  /**
+   * returns the whole text passed to the scanner
+   * @returns {string}
+   * @memberof Scanner
+   */
   getText(): string
+
+  setOnError(onError: ErrorCallback | undefined): void
+
+  /**
+   * sets the lexer to the specified position in the text
+   * @param {number} textPos
+   * @memberof Scanner
+   */
+  setTextPos(textPos: number): void
 
   /**
    * Sets the text for the scanner to scan. An optional sub-range starting point and length
    * can be provided to have the scanner only scan a portion of the text.
+   * @param {(string | undefined)} text
+   * @param {number} [start]
+   * @param {number} [length]
+   * @memberof Scanner
    */
   setText(text: string | undefined, start?: number, length?: number): void
-
-  /** sets the lexer to the specified position in the text */
-  setTextPos(textPos: number): void
-
-  /** returns the current position (end position of text of current token) */
-  getTextPos(): number
 }

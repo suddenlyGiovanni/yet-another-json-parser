@@ -1,10 +1,9 @@
 /* eslint-disable unicorn/number-literal-case */
 /* eslint-disable no-magic-numbers */
-import { JSONText, TokenFlags } from '../../../types'
-import { Lexer } from '../lexer'
-import type { ErrorCallback } from '../lexer'
-
-import { SyntaxKind } from 'lexical-analysis/types'
+import { Lexer } from 'lexical-analysis/lexer'
+import type { ErrorCallback } from 'lexical-analysis/lexer'
+import { JSONText, TokenFlags } from 'types/index'
+import { SyntaxKind } from 'types/types'
 
 describe('lexer', () => {
   const mockOnError = jest.fn(
@@ -692,6 +691,82 @@ describe('lexer', () => {
           expect(scanner.scan()).not.toBe(SyntaxKind.Comma)
           expect(scanner.scan()).toBe(SyntaxKind.Comma)
           expect(scanner.getTextPos()).toBe(text.length)
+        })
+      })
+
+      describe('literal name tokens', () => {
+        it('should return `SyntaxKind.TrueKeyword` when encountering the `true` reserved keyword', () => {
+          // arrange
+          expect.hasAssertions()
+          const text = JSON.stringify({ boolean: true }, null, 2) // ?
+          const scanner = new Lexer(text)
+          // act
+          scanner.scan() // LeftCurlyBracket '{'
+          scanner.scan() // NewLineTrivia '\n'
+          scanner.scan() // WhitespaceTrivia '\s'
+          scanner.scan() // StringLiteral 'boolean'
+          scanner.scan() // Colon ':'
+          scanner.scan() // WhitespaceTrivia '\s'
+          // assert
+          expect(scanner.scan()).toBe(SyntaxKind.TrueKeyword)
+          expect(scanner.getTokenValue()).toBe('true')
+          expect(scanner.getTextPos()).toBe(
+            text.lastIndexOf('true') + 'true'.length
+          )
+        })
+        it('should return `SyntaxKind.FalseKeyword` when encountering the `false` reserved keyword', () => {
+          // arrange
+          expect.hasAssertions()
+          const text = JSON.stringify({ boolean: false }, null, 2)
+          const scanner = new Lexer(text)
+          // act
+          scanner.scan() // LeftCurlyBracket '{'
+          scanner.scan() // NewLineTrivia '\n'
+          scanner.scan() // WhitespaceTrivia '\s'
+          scanner.scan() // StringLiteral 'boolean'
+          scanner.scan() // Colon ':'
+          scanner.scan() // WhitespaceTrivia '\s'
+          // assert
+          expect(scanner.scan()).toBe(SyntaxKind.FalseKeyword)
+          expect(scanner.getTokenValue()).toBe('false')
+          expect(scanner.getTextPos()).toBe(
+            text.lastIndexOf('false') + 'false'.length
+          )
+        })
+
+        it('should return `SyntaxKind.NullKeyword` when encountering the `null` reserved keyword', () => {
+          // arrange
+          expect.hasAssertions()
+          const text = JSON.stringify({ nullable: null }, null, 2)
+          const scanner = new Lexer(text)
+          // act
+          scanner.scan() // LeftCurlyBracket '{'
+          scanner.scan() // NewLineTrivia '\n'
+          scanner.scan() // WhitespaceTrivia '\s'
+          scanner.scan() // StringLiteral 'boolean'
+          scanner.scan() // Colon ':'
+          scanner.scan() // WhitespaceTrivia '\s'
+          // assert
+          expect(scanner.scan()).toBe(SyntaxKind.NullKeyword)
+          expect(scanner.getTokenValue()).toBe('null')
+          expect(scanner.getTextPos()).toBe(
+            text.lastIndexOf('null') + 'null'.length
+          )
+        })
+
+        it.skip('should not care about non legal json literal tokens', () => {
+          // arrange
+          expect.hasAssertions()
+          const text = `{"illegalJsonTokenValue":undefined}`
+          const scanner = new Lexer(text)
+          // act
+          scanner.scan() // LeftCurlyBracket
+          scanner.scan() // StringLiteral
+          scanner.scan() // Colon
+          scanner.scan() // ?
+          scanner.scan() // ?
+          // assert
+          scanner.getTokenValue() // ?
         })
       })
     })

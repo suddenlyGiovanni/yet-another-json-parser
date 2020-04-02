@@ -1,4 +1,5 @@
-import { MapLike, createMapFromTemplate } from '../create-map'
+import { MapLike } from 'types'
+import { createMapFromTemplate } from 'utils/create-map'
 
 describe('createMapFromTemplate', () => {
   const enum SyntaxKind {
