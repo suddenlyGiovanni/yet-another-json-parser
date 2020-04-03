@@ -1,9 +1,8 @@
 /* eslint-disable unicorn/number-literal-case */
 /* eslint-disable no-magic-numbers */
 import { Lexer } from 'lexical-analysis/lexer'
-import type { ErrorCallback } from 'lexical-analysis/lexer'
-import { JSONText, TokenFlags } from 'types/index'
-import { SyntaxKind } from 'types/types'
+import { JSONText, SyntaxKind, TokenFlags } from 'types/index'
+import { ErrorCallback } from 'types/lexer'
 
 describe('lexer', () => {
   const mockOnError = jest.fn(

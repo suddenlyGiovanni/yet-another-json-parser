@@ -11,12 +11,18 @@ import {
   isLineFeedChr,
   isSpaceChr,
 } from 'lexical-analysis/identify'
-import { CharacterCodes, JSONText, MapLike, TokenFlags } from 'types/index'
+import {
+  CharacterCodes,
+  ILexer,
+  JSONText,
+  KeywordSyntaxKind,
+  MapLike,
+  SyntaxKind,
+  TokenFlags,
+} from 'types/index'
 
-import { KeywordSyntaxKind, Scanner, SyntaxKind } from 'types/types'
+import type { ErrorCallback } from 'types/lexer'
 import { createMapFromTemplate } from 'utils/create-map'
-
-export type ErrorCallback = (message: string, length: number) => void
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const textToKeywordObject: MapLike<KeywordSyntaxKind> = {
@@ -28,7 +34,7 @@ const textToKeywordObject: MapLike<KeywordSyntaxKind> = {
 const textToKeyword = createMapFromTemplate(textToKeywordObject)
 
 // TODO: class Lexer implements Scanner
-export class Lexer implements Scanner {
+export class Lexer implements ILexer {
   /** the raw string provided to the Lexer */
   private text!: string
 
