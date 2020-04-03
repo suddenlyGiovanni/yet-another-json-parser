@@ -1,10 +1,10 @@
 /* eslint-disable unicorn/number-literal-case */
 /* eslint-disable no-magic-numbers */
-import { Lexer } from 'lexical-analysis/lexer'
+import { LexerImpl } from 'lexical-analysis/lexer'
 import { JSONText, SyntaxKind, TokenFlags } from 'types/index'
 import { ErrorCallback } from 'types/lexer'
 
-describe('lexer', () => {
+describe('lexerImpl', () => {
   const mockOnError = jest.fn(
     ((_message: string, _length: number): void => undefined) as ErrorCallback
   )
@@ -21,8 +21,8 @@ describe('lexer', () => {
   it('should not throw if instantiated without any arguments', () => {
     expect.hasAssertions()
 
-    function instantiateLexer(): Lexer {
-      return new Lexer()
+    function instantiateLexer(): LexerImpl {
+      return new LexerImpl()
     }
     expect(instantiateLexer).not.toThrow()
   })
@@ -33,21 +33,21 @@ describe('lexer', () => {
     const start = 0
     const { length } = jsonText
     const onError = setUpOnError()
-    function instantiateLexer(): Lexer {
-      return new Lexer(jsonText, onError, start, length)
+    function instantiateLexer(): LexerImpl {
+      return new LexerImpl(jsonText, onError, start, length)
     }
     expect(instantiateLexer).not.toThrow()
   })
 
   it('should be able to accepts a new `text` to tokenize', () => {
     expect.hasAssertions()
-    const scanner = new Lexer()
+    const scanner = new LexerImpl()
     scanner.setText(jsonText)
     expect(scanner.getText()).toBe(jsonText)
   })
   it('should be able to accepts a new `text` and the position were to start', () => {
     expect.hasAssertions()
-    const scanner = new Lexer()
+    const scanner = new LexerImpl()
     const startPos = 4
     const { length } = jsonText
     scanner.setText(jsonText, startPos, length)
@@ -59,7 +59,7 @@ describe('lexer', () => {
     const start = 6
     const textPos = 17
     const onError = setUpOnError()
-    const scanner = new Lexer(jsonText, onError, start, jsonText.length)
+    const scanner = new LexerImpl(jsonText, onError, start, jsonText.length)
 
     expect(scanner.getTextPos()).toBe(start)
     scanner.setTextPos(textPos)
@@ -69,7 +69,7 @@ describe('lexer', () => {
 
   it('should return the current token when `getToken` is invoked', () => {
     expect.hasAssertions()
-    const scanner = new Lexer()
+    const scanner = new LexerImpl()
     expect(scanner.getToken()).toBe(SyntaxKind.Unknown)
   })
 
@@ -79,7 +79,7 @@ describe('lexer', () => {
       const start = jsonText.length
       const { length } = jsonText
       const onError = setUpOnError()
-      const scanner = new Lexer(jsonText, onError, start, length)
+      const scanner = new LexerImpl(jsonText, onError, start, length)
       const token = scanner.scan()
 
       expect(token).toBe(SyntaxKind.EndOfFileToken)
@@ -89,7 +89,7 @@ describe('lexer', () => {
       expect.hasAssertions()
       const textInitial = `💥🧨`
       const onError = setUpOnError()
-      const scanner = new Lexer(textInitial, onError)
+      const scanner = new LexerImpl(textInitial, onError)
 
       const token = scanner.scan()
       expect(token).toBe(SyntaxKind.Unknown)
@@ -97,13 +97,20 @@ describe('lexer', () => {
       expect(onError).toHaveBeenCalledWith('invalid character', 0)
     })
 
-    it('should error if the scanned character falls out of the Basic Multilingual Plane (BMP) beyond 65,536 code points', () => {
+    it('should error if the scanned character falls out of the Basic Multilingual Plane (BMP) beyond 65_536 code points', () => {
+      // arrange
       expect.hasAssertions()
-      const textInitial = `${String.fromCodePoint(0x10000)}`
       const onError = setUpOnError()
-      const scanner = new Lexer(textInitial, onError)
+      const scanner = new LexerImpl(
+        `${String.fromCodePoint(LexerImpl.UNICODE_BMP_TOP_BOUNDARY)}`,
+        onError
+      )
 
-      expect(scanner.scan()).toBe(SyntaxKind.Unknown)
+      // act
+      scanner.scan()
+
+      // expect
+      expect(scanner.getToken()).toBe(SyntaxKind.Unknown)
       expect(onError).toHaveBeenCalledTimes(1)
       expect(onError).toHaveBeenCalledWith('invalid character', 0)
       expect(scanner.getTextPos()).toBe(2)
@@ -117,7 +124,12 @@ describe('lexer', () => {
 
       const initialPos = textWithLineFeed.lastIndexOf('feed') + 'feed'.length // ?
       const { length } = textWithLineFeed
-      const scanner = new Lexer(textWithLineFeed, onError, initialPos, length)
+      const scanner = new LexerImpl(
+        textWithLineFeed,
+        onError,
+        initialPos,
+        length
+      )
 
       // act
       scanner.scan()
@@ -138,7 +150,7 @@ describe('lexer', () => {
       const initialPos =
         textWithCarriageReturn.lastIndexOf('return') + 'return'.length // ?
       const { length } = textWithCarriageReturn
-      const scanner = new Lexer(
+      const scanner = new LexerImpl(
         textWithCarriageReturn,
         onError,
         initialPos,
@@ -164,7 +176,7 @@ describe('lexer', () => {
       const initialPos =
         textWithCarriageReturnAndLineFeed.lastIndexOf('feed') + 'feed'.length // ?
       const { length } = textWithCarriageReturnAndLineFeed
-      const scanner = new Lexer(
+      const scanner = new LexerImpl(
         textWithCarriageReturnAndLineFeed,
         onError,
         initialPos,
@@ -189,7 +201,12 @@ describe('lexer', () => {
       const textWithWhiteSpaces = 'text  \f\v\twith whites space'
       const initialPos = textWithWhiteSpaces.lastIndexOf('text') + 'text'.length
       const end = textWithWhiteSpaces.length
-      const scanner = new Lexer(textWithWhiteSpaces, onError, initialPos, end)
+      const scanner = new LexerImpl(
+        textWithWhiteSpaces,
+        onError,
+        initialPos,
+        end
+      )
 
       // act
       scanner.scan()
@@ -209,7 +226,7 @@ describe('lexer', () => {
          * const textInitial = `"this is a 'string'"`
          * scanner.getTokenValue === `this is a 'string'`
          */
-        const scanner = new Lexer(`"this is a 'string'"`, onError)
+        const scanner = new LexerImpl(`"this is a 'string'"`, onError)
 
         // act
         scanner.scan() // ?
@@ -229,7 +246,7 @@ describe('lexer', () => {
          * const textInitial = `"""`
          * scanner.getTokenValue === `"`
          */
-        const scanner = new Lexer('"\\u0022"', onError)
+        const scanner = new LexerImpl('"\\u0022"', onError)
 
         // act
         scanner.scan()
@@ -249,7 +266,7 @@ describe('lexer', () => {
          * const textInitial = `"\"`
          * scanner.getTokenValue === `\`
          */
-        const scanner = new Lexer('"\\u005C"', onError)
+        const scanner = new LexerImpl('"\\u005C"', onError)
 
         // act
         scanner.scan()
@@ -269,7 +286,7 @@ describe('lexer', () => {
          * const textInitial = `"/"`
          * scanner.getTokenValue === `/`
          */
-        const scanner = new Lexer('"\\u002F"', onError)
+        const scanner = new LexerImpl('"\\u002F"', onError)
 
         // act
         scanner.scan()
@@ -289,7 +306,7 @@ describe('lexer', () => {
          * const textInitial = `"\b"`
          * scanner.getTokenValue === `\b`
          */
-        const scanner = new Lexer('"\\u0008"', onError)
+        const scanner = new LexerImpl('"\\u0008"', onError)
 
         // act
         scanner.scan()
@@ -309,7 +326,7 @@ describe('lexer', () => {
          * const textInitial = `"\f"`
          * scanner.getTokenValue === `\f`
          */
-        const scanner = new Lexer('"\\u000C"', onError)
+        const scanner = new LexerImpl('"\\u000C"', onError)
 
         // act
         scanner.scan()
@@ -329,7 +346,7 @@ describe('lexer', () => {
          * const textInitial = `"\n"`
          * scanner.getTokenValue === `\n`
          */
-        const scanner = new Lexer('"\\u000A"', onError)
+        const scanner = new LexerImpl('"\\u000A"', onError)
 
         // act
         scanner.scan()
@@ -349,7 +366,7 @@ describe('lexer', () => {
          * const textInitial = `"\r"`
          * scanner.getTokenValue === `\r`
          */
-        const scanner = new Lexer('"\\u000D"', onError)
+        const scanner = new LexerImpl('"\\u000D"', onError)
 
         // act
         scanner.scan()
@@ -369,7 +386,7 @@ describe('lexer', () => {
          * const textInitial = `"\t"`
          * scanner.getTokenValue === `\t`
          */
-        const scanner = new Lexer('"\\u0009"', onError)
+        const scanner = new LexerImpl('"\\u0009"', onError)
 
         // act
         scanner.scan()
@@ -381,7 +398,7 @@ describe('lexer', () => {
       })
 
       describe('should handle string with hexadecimal escapes control characters from (U+0000) to (U+001F)', () => {
-        const scanner = new Lexer()
+        const scanner = new LexerImpl()
         it('(U+0000) = NULL', () => {
           expect.hasAssertions()
           scanner.setText('"\\u0000"')
@@ -625,7 +642,7 @@ describe('lexer', () => {
         it('should return `SyntaxKind.LeftSquareBracket` when encountering a left square bracket `[`', () => {
           // arrange
           expect.hasAssertions()
-          const scanner = new Lexer('[]')
+          const scanner = new LexerImpl('[]')
           // act
           scanner.scan()
           // assert
@@ -636,7 +653,7 @@ describe('lexer', () => {
         it('should return `SyntaxKind.RightSquareBracket` when encountering a right square bracket `]`', () => {
           // arrange
           expect.hasAssertions()
-          const scanner = new Lexer('[]')
+          const scanner = new LexerImpl('[]')
           // act
           scanner.scan()
           // assert
@@ -647,7 +664,7 @@ describe('lexer', () => {
         it('should return `SyntaxKind.LeftCurlyBracket` when encountering a left curly bracket `{`', () => {
           // arrange
           expect.hasAssertions()
-          const scanner = new Lexer('{}')
+          const scanner = new LexerImpl('{}')
           // act
           scanner.scan()
           // assert
@@ -658,7 +675,7 @@ describe('lexer', () => {
         it('should return `SyntaxKind.RightCurlyBracket` when encountering a right curly bracket `}`', () => {
           // arrange
           expect.hasAssertions()
-          const scanner = new Lexer('{}')
+          const scanner = new LexerImpl('{}')
           // act
           scanner.scan()
           // assert
@@ -669,7 +686,7 @@ describe('lexer', () => {
         it('should return `SyntaxKind.Colon` when encountering a colon `:`', () => {
           // arrange
           expect.hasAssertions()
-          const scanner = new Lexer(' : ')
+          const scanner = new LexerImpl(' : ')
           // act
           scanner.scan()
           // assert
@@ -682,7 +699,7 @@ describe('lexer', () => {
           // arrange
           expect.hasAssertions()
           const text = '"key": "a, b, c",'
-          const scanner = new Lexer(text)
+          const scanner = new LexerImpl(text)
           // assert
           expect(scanner.scan()).not.toBe(SyntaxKind.Comma)
           expect(scanner.scan()).not.toBe(SyntaxKind.Comma)
@@ -698,7 +715,7 @@ describe('lexer', () => {
           // arrange
           expect.hasAssertions()
           const text = JSON.stringify({ boolean: true }, null, 2) // ?
-          const scanner = new Lexer(text)
+          const scanner = new LexerImpl(text)
           // act
           scanner.scan() // LeftCurlyBracket '{'
           scanner.scan() // NewLineTrivia '\n'
@@ -717,7 +734,7 @@ describe('lexer', () => {
           // arrange
           expect.hasAssertions()
           const text = JSON.stringify({ boolean: false }, null, 2)
-          const scanner = new Lexer(text)
+          const scanner = new LexerImpl(text)
           // act
           scanner.scan() // LeftCurlyBracket '{'
           scanner.scan() // NewLineTrivia '\n'
@@ -737,7 +754,7 @@ describe('lexer', () => {
           // arrange
           expect.hasAssertions()
           const text = JSON.stringify({ nullable: null }, null, 2)
-          const scanner = new Lexer(text)
+          const scanner = new LexerImpl(text)
           // act
           scanner.scan() // LeftCurlyBracket '{'
           scanner.scan() // NewLineTrivia '\n'
@@ -753,19 +770,26 @@ describe('lexer', () => {
           )
         })
 
-        it.skip('should not care about non legal json literal tokens', () => {
+        it('should not care about non legal json literal tokens', () => {
           // arrange
           expect.hasAssertions()
-          const text = `{"illegalJsonTokenValue":undefined}`
-          const scanner = new Lexer(text)
+          const text = `{"legalJsonKey":illegalJsonValue}`
+          const scanner = new LexerImpl(text)
+
           // act
-          scanner.scan() // LeftCurlyBracket
-          scanner.scan() // StringLiteral
-          scanner.scan() // Colon
-          scanner.scan() // ?
-          scanner.scan() // ?
+          scanner.scan() // SyntaxKind.LeftCurlyBracket
+          scanner.getTokenText() // `{`
+
+          scanner.scan() // SyntaxKind.StringLiteral
+          scanner.getTokenText() // `legalJsonKey`
+
+          scanner.scan() // SyntaxKind.Colon
+          scanner.getTokenText() // `:`
+
           // assert
-          scanner.getTokenValue() // ?
+          expect(scanner.scan()).toBe(SyntaxKind.Identifier)
+          expect(scanner.getTokenText()).toBe('illegalJsonValue')
+          expect(scanner.getTokenValue()).toBe('illegalJsonValue')
         })
       })
     })

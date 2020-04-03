@@ -1,1 +1,1 @@
-export { Lexer } from 'lexical-analysis/lexer'
+export { LexerImpl as Lexer } from 'lexical-analysis/lexer'

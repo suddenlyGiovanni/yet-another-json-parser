@@ -12,7 +12,7 @@ export {
   JSONValueGrammar,
   KeywordSyntaxKind,
 } from 'types/syntax-kind'
-export { ILexer } from 'types/lexer'
+export { Lexer  } from 'types/lexer'
 
 /**
  * A JSON text is a sequence of tokens formed from Unicode code points that conforms to the JSON

@@ -11,55 +11,65 @@ import {
   isLineFeedChr,
   isSpaceChr,
 } from 'lexical-analysis/identify'
+
 import {
   CharacterCodes,
-  ILexer,
   JSONText,
   KeywordSyntaxKind,
-  MapLike,
+  Lexer,
   SyntaxKind,
   TokenFlags,
 } from 'types/index'
 
 import type { ErrorCallback } from 'types/lexer'
+import { textToKeywordObject } from 'types/syntax-kind'
 import { createMapFromTemplate } from 'utils/create-map'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const textToKeywordObject: MapLike<KeywordSyntaxKind> = {
-  false: SyntaxKind.FalseKeyword,
-  null: SyntaxKind.NullKeyword,
-  true: SyntaxKind.TrueKeyword,
-}
-
-const textToKeyword = createMapFromTemplate(textToKeywordObject)
-
-// TODO: class Lexer implements Scanner
-export class Lexer implements ILexer {
-  /** the raw string provided to the Lexer */
-  private text!: string
-
-  /** Current position (end position of text of current token) */
-  private pos!: number
+/**
+ * DONE:(whitespace, curly brackets, square brackets, colum, comma, string, null, true, false)
+ * TODO: numbers
+ * TODO: remove unnecessary complexity
+ * TODO: clean the naming
+ * TODO: better error emission
+ * @export
+ * @class LexerImpl
+ * @implements {Lexer}
+ */
+export class LexerImpl implements Lexer {
+  /**
+   * upper limit of Basic Multilingual Plane (BMP) 65_536
+   * @private
+   * @memberof Lexer
+   */
+  public static readonly UNICODE_BMP_TOP_BOUNDARY = 0x10000
 
   /** end of text */
   private end!: number
+
+  private onError?: ErrorCallback
+
+  /** Current position (end position of text of current token) */
+  private pos!: number
 
   /** Start position of whitespace before current token */
   // @ts-ignore
   private startPos!: number
 
-  /**  Start position of text of current token */
-  // @ts-ignore
-  private tokenPos!: number
+  /** the raw string provided to the Lexer */
+  private text!: string
+
+  private readonly textToKeyword = createMapFromTemplate(textToKeywordObject)
 
   private token!: SyntaxKind
 
   private tokenFlags: TokenFlags
 
+  /**  Start position of text of current token */
+  // @ts-ignore
+  private tokenPos!: number
+
   // @ts-ignore
   private tokenValue!: string
-
-  private onError?: ErrorCallback
 
   public constructor(
     textInitial?: JSONText,
@@ -230,12 +240,21 @@ export class Lexer implements ILexer {
               )
             ) {
               this.pos += this.charSize(ch)
-              console.log('here', String.fromCharCode(ch)) // ?
             }
             // eslint-disable-next-line unicorn/prefer-string-slice
             this.tokenValue = this.text.substring(this.tokenPos, this.pos)
             this.token = this.getIdentifierToken()
             return this.token
+          }
+          if (this.isWhiteSpaceSingleLine(ch)) {
+            this.pos += this.charSize(ch)
+            // eslint-disable-next-line no-continue
+            continue
+          } else if (this.isLineBreak(ch)) {
+            this.tokenFlags = TokenFlags.PrecedingLineBreak
+            this.pos += this.charSize(ch)
+            // eslint-disable-next-line no-continue
+            continue
           }
           // TODO: Remove this Fall through console log
           // eslint-disable-next-line no-console
@@ -364,35 +383,39 @@ export class Lexer implements ILexer {
 
   private isIdentifierStart(ch: number): boolean {
     return (
-      ch === CharacterCodes.t ||
-      ch === CharacterCodes.f ||
-      ch === CharacterCodes.n
+      (ch >= CharacterCodes.A && ch <= CharacterCodes.Z) ||
+      (ch >= CharacterCodes.a && ch <= CharacterCodes.z) ||
+      ch === CharacterCodes.$ ||
+      ch === CharacterCodes._
+    )
+  }
+
+  private isIdentifierPart(ch: number): boolean {
+    return (
+      (ch >= CharacterCodes.A && ch <= CharacterCodes.Z) ||
+      (ch >= CharacterCodes.a && ch <= CharacterCodes.z) ||
+      (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) ||
+      ch === CharacterCodes.$ ||
+      ch === CharacterCodes._
     )
   }
 
   private getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
-    // eslint-disable-next-line unicorn/prevent-abbreviations
-    const len = this.tokenValue.length
-    if (len >= 4 && len <= 5) {
+    const { length } = this.tokenValue
+    if (length >= 2 && length <= 11) {
       const ch = this.tokenValue.charCodeAt(0)
       if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
-        const keyword = textToKeyword.get(this.tokenValue)
-        if (keyword !== undefined) {
-          this.token = keyword
-          return this.token
+        const literalNameToken = this.textToKeyword.get(this.tokenValue)
+        if (literalNameToken !== undefined) {
+          return literalNameToken
         }
       }
     }
-    this.token = SyntaxKind.Identifier
-    return this.token
-  }
-
-  private isIdentifierPart(ch: number): boolean {
-    return ch >= CharacterCodes.a && ch <= CharacterCodes.z
+    return SyntaxKind.Identifier
   }
 
   private scanHexadecimalEscape(): string {
-    const escapedValue = this.scanExactNumberOfHexDigits() // ?
+    const escapedValue = this.scanExactNumberOfHexDigits()
 
     if (escapedValue >= 0) {
       return String.fromCharCode(escapedValue) // ?
@@ -407,7 +430,7 @@ export class Lexer implements ILexer {
    */
   private scanExactNumberOfHexDigits(): number {
     const valueString = this.scanHexDigits()
-    return valueString ? parseInt(valueString, 16) : -1
+    return valueString ? Number.parseInt(valueString, 16) : -1
   }
 
   private scanHexDigits(): string {
@@ -496,12 +519,12 @@ export class Lexer implements ILexer {
     }
   }
 
-  private codePointAt(s: string, i: number): number {
-    return s.codePointAt(i)!
+  private codePointAt(string: string, position: number): number {
+    return string.codePointAt(position)!
   }
 
   private charSize(ch: number): 1 | 2 {
-    if (ch >= 0x10000) {
+    if (ch >= LexerImpl.UNICODE_BMP_TOP_BOUNDARY) {
       return 2
     }
     return 1

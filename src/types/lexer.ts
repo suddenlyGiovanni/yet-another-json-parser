@@ -2,7 +2,7 @@ import { SyntaxKind, TokenFlags } from 'types'
 
 export type ErrorCallback = (message: string, length: number) => void
 
-export interface ILexer {
+export interface Lexer {
   /**
    * returns the start position of whitespace before current token
    * @returns {number}

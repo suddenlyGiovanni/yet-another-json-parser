@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 /* eslint-disable sonarjs/no-duplicate-string */
 import {
   iRightSquareBracketChr,

@@ -1,3 +1,5 @@
+import { MapLike } from 'types'
+
 export const enum SyntaxKind {
   /** Bottom type representing an unknown token */
   Unknown,
@@ -133,6 +135,11 @@ export type KeywordSyntaxKind =
   | SyntaxKind.FalseKeyword
   | SyntaxKind.NullKeyword
 
+export const textToKeywordObject: MapLike<KeywordSyntaxKind> = {
+  false: SyntaxKind.FalseKeyword,
+  null: SyntaxKind.NullKeyword,
+  true: SyntaxKind.TrueKeyword,
+}
 export type JSONValueGrammar =
   | SyntaxKind.LeftSquareBracket
   | SyntaxKind.LeftCurlyBracket
