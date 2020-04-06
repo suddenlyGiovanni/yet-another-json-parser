@@ -216,6 +216,17 @@ describe('lexerImpl', () => {
       expect(scanner.getTextPos()).toBe(textWithWhiteSpaces.lastIndexOf('with'))
     })
 
+    it('should return `MinusToken` if it encounter a minus sign (-)', () => {
+      // arrange
+      expect.hasAssertions()
+      const text: JSONText = JSON.stringify(-100) // ?
+      const scanner = new LexerImpl(text)
+      // act
+      scanner.scan()
+      // assert
+      expect(scanner.getToken()).toBe(SyntaxKind.MinusToken)
+    })
+
     describe('string - A string is a sequence of Unicode code points wrapped with quotation marks (U+0022). All code points may be placed within the quotation marks except for the code points that must be escaped: (quotation mark, reverse solidus, and the control characters)', () => {
       it('should return `StringLiteral` when it encounters a string identified by double quotes (")', () => {
         // arrange

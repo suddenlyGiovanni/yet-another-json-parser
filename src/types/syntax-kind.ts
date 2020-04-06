@@ -116,6 +116,13 @@ export const enum SyntaxKind {
    */
   Space,
 
+  /**
+   * token: `-`
+   * description: hyphen-minus
+   * unicode code point: `U+002D`
+   */
+  MinusToken,
+
   // Literals
 
   NumericLiteral,

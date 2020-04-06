@@ -82,18 +82,8 @@ export class LexerImpl implements Lexer {
     this.tokenFlags = TokenFlags.None
   }
 
-  setOnError(onError: ErrorCallback | undefined): void {
-    this.onError = onError
-  }
-
-  public setText(
-    newText: string | undefined,
-    start?: number | undefined,
-    length?: number | undefined
-  ): void {
-    this.text = newText || ''
-    this.end = length === undefined ? this.text.length : length
-    this.setTextPos(start || 0)
+  public getStartPos(): number {
+    return this.startPos
   }
 
   public getText(): string {
@@ -104,28 +94,16 @@ export class LexerImpl implements Lexer {
     return this.pos
   }
 
-  public setTextPos(textPos: number): void {
-    this.pos = textPos
-    this.startPos = textPos
-    this.tokenPos = textPos
-    this.token = SyntaxKind.Unknown
-    this.tokenValue = undefined!
-  }
-
-  public getStartPos(): number {
-    return this.startPos
-  }
-
-  public getTokenPos(): number {
-    return this.tokenPos
-  }
-
   public getToken(): SyntaxKind {
     return this.token
   }
 
-  public getTokenValue(): string {
-    return this.tokenValue
+  public getTokenFlags(): TokenFlags {
+    return this.tokenFlags
+  }
+
+  public getTokenPos(): number {
+    return this.tokenPos
   }
 
   public getTokenText(): string {
@@ -133,8 +111,8 @@ export class LexerImpl implements Lexer {
     return this.text.substring(this.tokenPos, this.pos)
   }
 
-  public getTokenFlags(): TokenFlags {
-    return this.tokenFlags
+  public getTokenValue(): string {
+    return this.tokenValue
   }
 
   public hasPrecedingLineBreak(): boolean {
@@ -229,6 +207,11 @@ export class LexerImpl implements Lexer {
           this.token = SyntaxKind.StringLiteral
           return this.token
 
+        case CharacterCodes.minus:
+          this.pos += 1
+          this.token = SyntaxKind.MinusToken
+          return this.token
+
         default:
           if (this.isIdentifierStart(ch)) {
             this.pos += this.charSize(ch)
@@ -271,51 +254,110 @@ export class LexerImpl implements Lexer {
     }
   }
 
-  private scanString(): string {
-    const quote = this.codePointAt(this.text, this.pos)
-    this.pos += 1 // step in one place
-    let result = ''
-    let start: number = this.pos // new starting position
+  public setOnError(onError: ErrorCallback | undefined): void {
+    this.onError = onError
+  }
 
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      if (this.pos >= this.end) {
-        // eslint-disable-next-line unicorn/prefer-string-slice
-        result += this.text.substring(start, this.pos)
-        this.tokenFlags = TokenFlags.Unterminated
-        this.error('Unterminated string literal')
-        break
-      }
-      const ch = this.codePointAt(this.text, this.pos)
+  public setText(
+    newText: string | undefined,
+    start?: number | undefined,
+    length?: number | undefined
+  ): void {
+    this.text = newText || ''
+    this.end = length === undefined ? this.text.length : length
+    this.setTextPos(start || 0)
+  }
 
-      if (ch === quote) {
-        // eslint-disable-next-line unicorn/prefer-string-slice
-        result += this.text.substring(start, this.pos)
-        this.pos += 1
-        break
-      }
+  public setTextPos(textPos: number): void {
+    this.pos = textPos
+    this.startPos = textPos
+    this.tokenPos = textPos
+    this.token = SyntaxKind.Unknown
+    this.tokenValue = undefined!
+  }
 
-      if (ch === CharacterCodes.backslash) {
-        // eslint-disable-next-line unicorn/prefer-string-slice
-        result += this.text.substring(start, this.pos)
-        result += this.scanEscapeSequence()
-        start = this.pos
-        // eslint-disable-next-line no-continue
-        continue
-      }
-
-      if (this.isLineBreak(ch)) {
-        // eslint-disable-next-line unicorn/prefer-string-slice
-        result += this.text.substring(start, this.pos)
-        this.tokenFlags = TokenFlags.Unterminated
-        this.error('Unterminated string literal')
-        break
-      }
-
-      this.pos += 1
+  private charSize(ch: number): 1 | 2 {
+    if (ch >= LexerImpl.UNICODE_BMP_TOP_BOUNDARY) {
+      return 2
     }
+    return 1
+  }
 
-    return result
+  private codePointAt(string: string, position: number): number {
+    return string.codePointAt(position)!
+  }
+
+  private error(message: string): void
+
+  private error(message: string, errPos: number, length: number): void
+
+  // eslint-disable-next-line default-param-last
+  private error(message: string, errorPos = this.pos, length?: number): void {
+    if (this.onError) {
+      const oldPos = this.pos
+      this.pos = errorPos
+      this.onError(message, length || 0)
+      this.pos = oldPos
+    }
+  }
+
+  private getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
+    const { length } = this.tokenValue
+    if (length >= 2 && length <= 11) {
+      const ch = this.tokenValue.charCodeAt(0)
+      if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
+        const literalNameToken = this.textToKeyword.get(this.tokenValue)
+        if (literalNameToken !== undefined) {
+          return literalNameToken
+        }
+      }
+    }
+    return SyntaxKind.Identifier
+  }
+
+  private isIdentifierPart(ch: number): boolean {
+    return (
+      (ch >= CharacterCodes.A && ch <= CharacterCodes.Z) ||
+      (ch >= CharacterCodes.a && ch <= CharacterCodes.z) ||
+      (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) ||
+      ch === CharacterCodes.$ ||
+      ch === CharacterCodes._
+    )
+  }
+
+  private isIdentifierStart(ch: number): boolean {
+    return (
+      (ch >= CharacterCodes.A && ch <= CharacterCodes.Z) ||
+      (ch >= CharacterCodes.a && ch <= CharacterCodes.z) ||
+      ch === CharacterCodes.$ ||
+      ch === CharacterCodes._
+    )
+  }
+
+  private isLineBreak(ch: number): boolean {
+    return (
+      isLineFeedChr(ch) ||
+      isCarriageReturnChr(ch) ||
+      ch === CharacterCodes.lineSeparator ||
+      ch === CharacterCodes.paragraphSeparator
+    )
+  }
+
+  private isWhiteSpaceSingleLine(ch: number): boolean {
+    return (
+      isSpaceChr(ch) ||
+      isCharacterTabulationChr(ch) ||
+      ch === CharacterCodes.verticalTab ||
+      ch === CharacterCodes.formFeed ||
+      ch === CharacterCodes.nonBreakingSpace ||
+      ch === CharacterCodes.nextLine ||
+      ch === CharacterCodes.ogham ||
+      (ch >= CharacterCodes.enQuad && ch <= CharacterCodes.zeroWidthSpace) ||
+      ch === CharacterCodes.narrowNoBreakSpace ||
+      ch === CharacterCodes.mathematicalSpace ||
+      ch === CharacterCodes.ideographicSpace ||
+      ch === CharacterCodes.byteOrderMark
+    )
   }
 
   private scanEscapeSequence(): string {
@@ -381,49 +423,6 @@ export class LexerImpl implements Lexer {
     }
   }
 
-  private isIdentifierStart(ch: number): boolean {
-    return (
-      (ch >= CharacterCodes.A && ch <= CharacterCodes.Z) ||
-      (ch >= CharacterCodes.a && ch <= CharacterCodes.z) ||
-      ch === CharacterCodes.$ ||
-      ch === CharacterCodes._
-    )
-  }
-
-  private isIdentifierPart(ch: number): boolean {
-    return (
-      (ch >= CharacterCodes.A && ch <= CharacterCodes.Z) ||
-      (ch >= CharacterCodes.a && ch <= CharacterCodes.z) ||
-      (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) ||
-      ch === CharacterCodes.$ ||
-      ch === CharacterCodes._
-    )
-  }
-
-  private getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
-    const { length } = this.tokenValue
-    if (length >= 2 && length <= 11) {
-      const ch = this.tokenValue.charCodeAt(0)
-      if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
-        const literalNameToken = this.textToKeyword.get(this.tokenValue)
-        if (literalNameToken !== undefined) {
-          return literalNameToken
-        }
-      }
-    }
-    return SyntaxKind.Identifier
-  }
-
-  private scanHexadecimalEscape(): string {
-    const escapedValue = this.scanExactNumberOfHexDigits()
-
-    if (escapedValue >= 0) {
-      return String.fromCharCode(escapedValue) // ?
-    }
-    this.error('Hexadecimal digit expected')
-    return ''
-  }
-
   /**
    * Scans the given number of hexadecimal digits in the text,
    * returning -1 if the given number is unavailable.
@@ -479,54 +478,60 @@ export class LexerImpl implements Lexer {
     return String.fromCharCode(...valueChars)
   }
 
-  private isWhiteSpaceSingleLine(ch: number): boolean {
-    return (
-      isSpaceChr(ch) ||
-      isCharacterTabulationChr(ch) ||
-      ch === CharacterCodes.verticalTab ||
-      ch === CharacterCodes.formFeed ||
-      ch === CharacterCodes.nonBreakingSpace ||
-      ch === CharacterCodes.nextLine ||
-      ch === CharacterCodes.ogham ||
-      (ch >= CharacterCodes.enQuad && ch <= CharacterCodes.zeroWidthSpace) ||
-      ch === CharacterCodes.narrowNoBreakSpace ||
-      ch === CharacterCodes.mathematicalSpace ||
-      ch === CharacterCodes.ideographicSpace ||
-      ch === CharacterCodes.byteOrderMark
-    )
-  }
+  private scanHexadecimalEscape(): string {
+    const escapedValue = this.scanExactNumberOfHexDigits()
 
-  private isLineBreak(ch: number): boolean {
-    return (
-      isLineFeedChr(ch) ||
-      isCarriageReturnChr(ch) ||
-      ch === CharacterCodes.lineSeparator ||
-      ch === CharacterCodes.paragraphSeparator
-    )
-  }
-
-  private error(message: string): void
-
-  private error(message: string, errPos: number, length: number): void
-
-  // eslint-disable-next-line default-param-last
-  private error(message: string, errorPos = this.pos, length?: number): void {
-    if (this.onError) {
-      const oldPos = this.pos
-      this.pos = errorPos
-      this.onError(message, length || 0)
-      this.pos = oldPos
+    if (escapedValue >= 0) {
+      return String.fromCharCode(escapedValue) // ?
     }
+    this.error('Hexadecimal digit expected')
+    return ''
   }
 
-  private codePointAt(string: string, position: number): number {
-    return string.codePointAt(position)!
-  }
+  private scanString(): string {
+    const quote = this.codePointAt(this.text, this.pos)
+    this.pos += 1 // step in one place
+    let result = ''
+    let start: number = this.pos // new starting position
 
-  private charSize(ch: number): 1 | 2 {
-    if (ch >= LexerImpl.UNICODE_BMP_TOP_BOUNDARY) {
-      return 2
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      if (this.pos >= this.end) {
+        // eslint-disable-next-line unicorn/prefer-string-slice
+        result += this.text.substring(start, this.pos)
+        this.tokenFlags = TokenFlags.Unterminated
+        this.error('Unterminated string literal')
+        break
+      }
+      const ch = this.codePointAt(this.text, this.pos)
+
+      if (ch === quote) {
+        // eslint-disable-next-line unicorn/prefer-string-slice
+        result += this.text.substring(start, this.pos)
+        this.pos += 1
+        break
+      }
+
+      if (ch === CharacterCodes.backslash) {
+        // eslint-disable-next-line unicorn/prefer-string-slice
+        result += this.text.substring(start, this.pos)
+        result += this.scanEscapeSequence()
+        start = this.pos
+        // eslint-disable-next-line no-continue
+        continue
+      }
+
+      if (this.isLineBreak(ch)) {
+        // eslint-disable-next-line unicorn/prefer-string-slice
+        result += this.text.substring(start, this.pos)
+        this.tokenFlags = TokenFlags.Unterminated
+        this.error('Unterminated string literal')
+        break
+      }
+
+      this.pos += 1
     }
-    return 1
+
+    return result
   }
 }

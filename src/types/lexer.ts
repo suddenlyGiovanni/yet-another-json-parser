@@ -11,11 +11,11 @@ export interface Lexer {
   getStartPos(): number
 
   /**
-   * returns the current Syntax Token
-   * @returns {SyntaxKind}
+   * returns the whole text passed to the scanner
+   * @returns {string}
    * @memberof Scanner
    */
-  getToken(): SyntaxKind
+  getText(): string
 
   /**
    * returns the current position (end position of text of current token)
@@ -23,6 +23,15 @@ export interface Lexer {
    * @memberof Scanner
    */
   getTextPos(): number
+
+  /**
+   * returns the current Syntax Token
+   * @returns {SyntaxKind}
+   * @memberof Scanner
+   */
+  getToken(): SyntaxKind
+
+  getTokenFlags(): TokenFlags
 
   /**
    * returns the Start position of text of current token
@@ -55,8 +64,6 @@ export interface Lexer {
 
   // isUnterminated(): boolean
 
-  getTokenFlags(): TokenFlags
-
   /**
    * steps over the next Token,
    * updates Scanner internal state (position in the scan, current token details etc)
@@ -66,21 +73,7 @@ export interface Lexer {
    */
   scan(): SyntaxKind
 
-  /**
-   * returns the whole text passed to the scanner
-   * @returns {string}
-   * @memberof Scanner
-   */
-  getText(): string
-
   setOnError(onError: ErrorCallback | undefined): void
-
-  /**
-   * sets the lexer to the specified position in the text
-   * @param {number} textPos
-   * @memberof Scanner
-   */
-  setTextPos(textPos: number): void
 
   /**
    * Sets the text for the scanner to scan. An optional sub-range starting point and length
@@ -91,4 +84,11 @@ export interface Lexer {
    * @memberof Scanner
    */
   setText(text: string | undefined, start?: number, length?: number): void
+
+  /**
+   * sets the lexer to the specified position in the text
+   * @param {number} textPos
+   * @memberof Scanner
+   */
+  setTextPos(textPos: number): void
 }

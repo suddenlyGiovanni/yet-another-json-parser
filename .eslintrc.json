@@ -219,69 +219,69 @@
     "@typescript-eslint/no-useless-constructor": "warn",
     "jest/no-disabled-tests": "warn",
     "@typescript-eslint/member-ordering": [
-      "error"
-      // {
-      //   "default": {
-      //     "memberTypes": [
-      //       // Index signature
-      //       "signature",
+      "error",
+      {
+        "default": {
+          "memberTypes": [
+            // Index signature
+            "signature",
 
-      //       // Fields
-      //       "public-static-field",
-      //       "protected-static-field",
-      //       "private-static-field",
+            // Fields
+            "public-static-field",
+            "protected-static-field",
+            "private-static-field",
 
-      //       "public-instance-field",
-      //       "protected-instance-field",
-      //       "private-instance-field",
+            "public-instance-field",
+            "protected-instance-field",
+            "private-instance-field",
 
-      //       "public-abstract-field",
-      //       "protected-abstract-field",
-      //       "private-abstract-field",
+            "public-abstract-field",
+            "protected-abstract-field",
+            "private-abstract-field",
 
-      //       "public-field",
-      //       "protected-field",
-      //       "private-field",
+            "public-field",
+            "protected-field",
+            "private-field",
 
-      //       "static-field",
-      //       "instance-field",
-      //       "abstract-field",
+            "static-field",
+            "instance-field",
+            "abstract-field",
 
-      //       "field",
+            "field",
 
-      //       // Constructors
-      //       "public-constructor",
-      //       "protected-constructor",
-      //       "private-constructor",
+            // Constructors
+            "public-constructor",
+            "protected-constructor",
+            "private-constructor",
 
-      //       "constructor",
+            "constructor",
 
-      //       // Methods
-      //       "public-static-method",
-      //       "protected-static-method",
-      //       "private-static-method",
+            // Methods
+            "public-static-method",
+            "protected-static-method",
+            "private-static-method",
 
-      //       "public-instance-method",
-      //       "protected-instance-method",
-      //       "private-instance-method",
+            "public-instance-method",
+            "protected-instance-method",
+            "private-instance-method",
 
-      //       "public-abstract-method",
-      //       "protected-abstract-method",
-      //       "private-abstract-method",
+            "public-abstract-method",
+            "protected-abstract-method",
+            "private-abstract-method",
 
-      //       "public-method",
-      //       "protected-method",
-      //       "private-method",
+            "public-method",
+            "protected-method",
+            "private-method",
 
-      //       "static-method",
-      //       "instance-method",
-      //       "abstract-method",
+            "static-method",
+            "instance-method",
+            "abstract-method",
 
-      //       "method"
-      //     ],
-      //     "order": "alphabetically"
-      //   }
-      // }
+            "method"
+          ],
+          "order": "alphabetically"
+        }
+      }
     ]
   }
 }
