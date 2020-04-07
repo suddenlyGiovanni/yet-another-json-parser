@@ -804,5 +804,32 @@ describe('lexerImpl', () => {
         })
       })
     })
+
+    // FIXME: remove test focus on numbers
+    // eslint-disable-next-line jest/no-focused-tests
+    describe.only('number - A number is a sequence of decimal digits with no superfluous leading zero. It may have a preceding minus sign. It may have a fractional part prefixed by a decimal point. It may have an exponent, prefixed by `e` or `E` and optionally `+`  or `-`. The digits are the code points U+0030 through U+0039.', () => {
+      it('should return `NumericLiteral` when it encounters a positive integer number as `100`', () => {
+        // arrange
+        expect.hasAssertions()
+        const text = JSON.stringify(100) // ?
+        const scanner = new LexerImpl(text)
+        // act
+        scanner.scan() // ?
+        // assert
+        expect(scanner.getToken()).toBe(SyntaxKind.NumericLiteral)
+        expect(scanner.getTokenValue()).toBe('100')
+      })
+
+      it.todo(
+        'should return `NumericLiteral` when it encounters a negative integer number as `-100`'
+      )
+      it.todo(
+        'should return `NumericLiteral` when it encounters a number with a fractional part prefixed by a decimal point as `0.15`'
+      )
+
+      it.todo(
+        'should return `NumericLiteral` when it encounters a number with an exponent, prefixed by `e` (`U+0065`) or `E` (`U+0045`) and optionally `+` (`U+002B`) or `-` (`U+002D`) as `1e-2`'
+      )
+    })
   })
 })

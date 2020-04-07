@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-string-slice */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
@@ -107,7 +108,6 @@ export class LexerImpl implements Lexer {
   }
 
   public getTokenText(): string {
-    // eslint-disable-next-line unicorn/prefer-string-slice
     return this.text.substring(this.tokenPos, this.pos)
   }
 
@@ -212,6 +212,22 @@ export class LexerImpl implements Lexer {
           this.token = SyntaxKind.MinusToken
           return this.token
 
+        case CharacterCodes._0:
+        case CharacterCodes._1:
+        case CharacterCodes._2:
+        case CharacterCodes._3:
+        case CharacterCodes._4:
+        case CharacterCodes._5:
+        case CharacterCodes._6:
+        case CharacterCodes._7:
+        case CharacterCodes._8:
+        case CharacterCodes._9: {
+          const { type, value } = this.scanNumber()
+          this.token = type
+          this.tokenValue = value
+          return this.token
+        }
+
         default:
           if (this.isIdentifierStart(ch)) {
             this.pos += this.charSize(ch)
@@ -224,7 +240,7 @@ export class LexerImpl implements Lexer {
             ) {
               this.pos += this.charSize(ch)
             }
-            // eslint-disable-next-line unicorn/prefer-string-slice
+
             this.tokenValue = this.text.substring(this.tokenPos, this.pos)
             this.token = this.getIdentifierToken()
             return this.token
@@ -313,6 +329,10 @@ export class LexerImpl implements Lexer {
       }
     }
     return SyntaxKind.Identifier
+  }
+
+  private isDigit(ch: number): boolean {
+    return ch >= CharacterCodes._0 && ch <= CharacterCodes._9
   }
 
   private isIdentifierPart(ch: number): boolean {
@@ -488,6 +508,46 @@ export class LexerImpl implements Lexer {
     return ''
   }
 
+  private scanNumber(): { type: SyntaxKind.NumericLiteral; value: string } {
+    const start = this.pos
+    const mainFragment = this.scanNumberFragment() // ?
+    let decimalFragment: string | undefined
+    // let scientificFragment: string | undefined
+
+    if (this.text.charCodeAt(this.pos) === CharacterCodes.dot) {
+      // scan the fraction part of the number
+    }
+    const end = this.pos
+
+    const results: string = this.text.substring(start, end)
+    if (decimalFragment !== undefined) {
+      // handle decimal number cases
+    }
+    this.tokenValue = results
+    this.token = SyntaxKind.NumericLiteral
+    return {
+      type: this.token,
+      value: this.tokenValue,
+    }
+  }
+
+  private scanNumberFragment(): string {
+    const start = this.pos
+    const result = ''
+
+    while (true) {
+      const ch = this.codePointAt(this.text, this.pos)
+      if (this.isDigit(ch)) {
+        this.pos += 1
+        // eslint-disable-next-line no-continue
+        continue
+      }
+      break
+    }
+
+    return result + this.text.substring(start, this.pos)
+  }
+
   private scanString(): string {
     const quote = this.codePointAt(this.text, this.pos)
     this.pos += 1 // step in one place
@@ -497,7 +557,6 @@ export class LexerImpl implements Lexer {
     // eslint-disable-next-line no-constant-condition
     while (true) {
       if (this.pos >= this.end) {
-        // eslint-disable-next-line unicorn/prefer-string-slice
         result += this.text.substring(start, this.pos)
         this.tokenFlags = TokenFlags.Unterminated
         this.error('Unterminated string literal')
@@ -506,14 +565,12 @@ export class LexerImpl implements Lexer {
       const ch = this.codePointAt(this.text, this.pos)
 
       if (ch === quote) {
-        // eslint-disable-next-line unicorn/prefer-string-slice
         result += this.text.substring(start, this.pos)
         this.pos += 1
         break
       }
 
       if (ch === CharacterCodes.backslash) {
-        // eslint-disable-next-line unicorn/prefer-string-slice
         result += this.text.substring(start, this.pos)
         result += this.scanEscapeSequence()
         start = this.pos
@@ -522,7 +579,6 @@ export class LexerImpl implements Lexer {
       }
 
       if (this.isLineBreak(ch)) {
-        // eslint-disable-next-line unicorn/prefer-string-slice
         result += this.text.substring(start, this.pos)
         this.tokenFlags = TokenFlags.Unterminated
         this.error('Unterminated string literal')
