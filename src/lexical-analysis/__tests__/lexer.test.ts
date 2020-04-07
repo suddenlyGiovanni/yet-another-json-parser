@@ -122,7 +122,7 @@ describe('lexerImpl', () => {
       const onError = setUpOnError()
       const textWithLineFeed = `text with line feed\n`
 
-      const initialPos = textWithLineFeed.lastIndexOf('feed') + 'feed'.length // ?
+      const initialPos = textWithLineFeed.lastIndexOf('feed') + 'feed'.length
       const { length } = textWithLineFeed
       const scanner = new LexerImpl(
         textWithLineFeed,
@@ -148,7 +148,7 @@ describe('lexerImpl', () => {
       const textWithCarriageReturn = `text with carriage return\r`
 
       const initialPos =
-        textWithCarriageReturn.lastIndexOf('return') + 'return'.length // ?
+        textWithCarriageReturn.lastIndexOf('return') + 'return'.length
       const { length } = textWithCarriageReturn
       const scanner = new LexerImpl(
         textWithCarriageReturn,
@@ -174,7 +174,7 @@ describe('lexerImpl', () => {
       const textWithCarriageReturnAndLineFeed = `text with carriage return and line feed\r\n`
 
       const initialPos =
-        textWithCarriageReturnAndLineFeed.lastIndexOf('feed') + 'feed'.length // ?
+        textWithCarriageReturnAndLineFeed.lastIndexOf('feed') + 'feed'.length
       const { length } = textWithCarriageReturnAndLineFeed
       const scanner = new LexerImpl(
         textWithCarriageReturnAndLineFeed,
@@ -219,7 +219,7 @@ describe('lexerImpl', () => {
     it('should return `MinusToken` if it encounter a minus sign (-)', () => {
       // arrange
       expect.hasAssertions()
-      const text: JSONText = JSON.stringify(-100) // ?
+      const text: JSONText = JSON.stringify(-100)
       const scanner = new LexerImpl(text)
       // act
       scanner.scan()
@@ -240,7 +240,7 @@ describe('lexerImpl', () => {
         const scanner = new LexerImpl(`"this is a 'string'"`, onError)
 
         // act
-        scanner.scan() // ?
+        scanner.scan()
 
         // assert
         expect(scanner.getToken()).toBe(SyntaxKind.StringLiteral)
@@ -725,7 +725,7 @@ describe('lexerImpl', () => {
         it('should return `SyntaxKind.TrueKeyword` when encountering the `true` reserved keyword', () => {
           // arrange
           expect.hasAssertions()
-          const text = JSON.stringify({ boolean: true }, null, 2) // ?
+          const text = JSON.stringify({ boolean: true }, null, 2)
           const scanner = new LexerImpl(text)
           // act
           scanner.scan() // LeftCurlyBracket '{'
@@ -807,29 +807,81 @@ describe('lexerImpl', () => {
 
     // FIXME: remove test focus on numbers
     // eslint-disable-next-line jest/no-focused-tests
-    describe.only('number - A number is a sequence of decimal digits with no superfluous leading zero. It may have a preceding minus sign. It may have a fractional part prefixed by a decimal point. It may have an exponent, prefixed by `e` or `E` and optionally `+`  or `-`. The digits are the code points U+0030 through U+0039.', () => {
+    describe('number - A number is a sequence of decimal digits with no superfluous leading zero. It may have a preceding minus sign. It may have a fractional part prefixed by a decimal point. It may have an exponent, prefixed by `e` or `E` and optionally `+`  or `-`. The digits are the code points U+0030 through U+0039.', () => {
       it('should return `NumericLiteral` when it encounters a positive integer number as `100`', () => {
         // arrange
         expect.hasAssertions()
-        const text = JSON.stringify(100) // ?
+        const text = JSON.stringify(100)
         const scanner = new LexerImpl(text)
         // act
-        scanner.scan() // ?
+        scanner.scan()
         // assert
         expect(scanner.getToken()).toBe(SyntaxKind.NumericLiteral)
         expect(scanner.getTokenValue()).toBe('100')
       })
 
-      it.todo(
-        'should return `NumericLiteral` when it encounters a negative integer number as `-100`'
-      )
-      it.todo(
-        'should return `NumericLiteral` when it encounters a number with a fractional part prefixed by a decimal point as `0.15`'
-      )
+      it('should return `NumericLiteral` when it encounters a negative integer number as `-100`', () => {
+        // arrange
+        expect.hasAssertions()
+        const text = JSON.stringify(-100)
+        const scanner = new LexerImpl(text)
+        // act
+        scanner.scan()
+        // assert
+        expect(scanner.getToken()).toBe(SyntaxKind.MinusToken)
+        expect(scanner.scan()).toBe(SyntaxKind.NumericLiteral)
+        expect(scanner.getTokenValue()).toBe('100')
+      })
+      it('should return `NumericLiteral` when it encounters a number with a fractional part prefixed by a decimal point as `0.15`', () => {
+        // arrange
+        expect.hasAssertions()
+        const text = JSON.stringify(0.15)
+        const scanner = new LexerImpl(text)
+        // act
+        scanner.scan()
+        // assert
+        expect(scanner.getToken()).toBe(SyntaxKind.NumericLiteral)
+        expect(scanner.getTokenText()).toBe('0.15')
+      })
 
-      it.todo(
-        'should return `NumericLiteral` when it encounters a number with an exponent, prefixed by `e` (`U+0065`) or `E` (`U+0045`) and optionally `+` (`U+002B`) or `-` (`U+002D`) as `1e-2`'
-      )
+      describe('should return `NumericLiteral` when it encounters a number with an exponent, prefixed by `e` (`U+0065`) or `E` (`U+0045`) and optionally `+` (`U+002B`) or `-` (`U+002D`).The digits are the code points (`U+0030`) through (`U+0039`).', () => {
+        it('should handle `2e200` as input', () => {
+          // arrange
+          expect.hasAssertions()
+          const text = '2e200'
+          const scanner = new LexerImpl(text)
+          // act
+          scanner.scan()
+          // assert
+          expect(scanner.getToken()).toBe(SyntaxKind.NumericLiteral)
+          expect(scanner.getTokenValue()).toBe('2e+200')
+        })
+
+        it('should handle `0.1E+34` as input', () => {
+          // arrange
+          expect.hasAssertions()
+          // eslint-disable-next-line prettier/prettier
+          const text = '0.1E+34'
+          const scanner = new LexerImpl(text)
+          // act
+          scanner.scan()
+          // assert
+          expect(scanner.getToken()).toBe(SyntaxKind.NumericLiteral)
+          expect(scanner.getTokenValue()).toBe('1e+33')
+        })
+        it('should handle `-1e-100` as input', () => {
+          // arrange
+          expect.hasAssertions()
+          // eslint-disable-next-line prettier/prettier
+          const text = '-1e-100'
+          const scanner = new LexerImpl(text)
+          // act
+          scanner.scan()
+          // assert
+          expect(scanner.scan()).toBe(SyntaxKind.NumericLiteral)
+          expect(scanner.getTokenValue()).toBe('1e-100')
+        })
+      })
     })
   })
 })

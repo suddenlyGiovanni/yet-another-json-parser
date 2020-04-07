@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 /* eslint-disable unicorn/prefer-string-slice */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
@@ -502,7 +503,7 @@ export class LexerImpl implements Lexer {
     const escapedValue = this.scanExactNumberOfHexDigits()
 
     if (escapedValue >= 0) {
-      return String.fromCharCode(escapedValue) // ?
+      return String.fromCharCode(escapedValue)
     }
     this.error('Hexadecimal digit expected')
     return ''
@@ -510,19 +511,60 @@ export class LexerImpl implements Lexer {
 
   private scanNumber(): { type: SyntaxKind.NumericLiteral; value: string } {
     const start = this.pos
-    const mainFragment = this.scanNumberFragment() // ?
+    this.scanNumberFragment()
     let decimalFragment: string | undefined
-    // let scientificFragment: string | undefined
 
-    if (this.text.charCodeAt(this.pos) === CharacterCodes.dot) {
+    if (this.codePointAt(this.text, this.pos) === CharacterCodes.dot) {
       // scan the fraction part of the number
+      this.pos += 1
+      decimalFragment = this.scanNumberFragment()
     }
-    const end = this.pos
+    let end = this.pos
+
+    if (
+      this.codePointAt(this.text, this.pos) === CharacterCodes.E ||
+      this.codePointAt(this.text, this.pos) === CharacterCodes.e
+    ) {
+      this.pos += 1
+      // eslint-disable-next-line operator-assignment
+      this.tokenFlags = this.tokenFlags | TokenFlags.Scientific
+      if (
+        this.codePointAt(this.text, this.pos) === CharacterCodes.plus ||
+        this.codePointAt(this.text, this.pos) === CharacterCodes.minus
+      ) {
+        this.pos += 1
+      }
+
+      /**
+       * @example
+       * -0.01e-100
+       * sign = [-]0.01e-100
+       * mainFragment = -[0].01e-100
+       * decimalToken = -0[.]01e-100
+       * decimalFragment = -0.[01]e-100
+       * preNumericPart = -0.01[e-]100
+       * finalFragment = -0.01e-[100]
+       * */
+      const finalFragment = this.scanNumberFragment()
+      if (!finalFragment) {
+        this.error('expect a digit after the scientific notation marker ')
+      } else {
+        end = this.pos
+      }
+    }
 
     const results: string = this.text.substring(start, end)
-    if (decimalFragment !== undefined) {
-      // handle decimal number cases
+
+    if (
+      decimalFragment !== undefined ||
+      this.tokenFlags & TokenFlags.Scientific
+    ) {
+      return {
+        type: SyntaxKind.NumericLiteral,
+        value: String(Number(results)), // if value is not an integer, it can be safely coerced to a number
+      }
     }
+
     this.tokenValue = results
     this.token = SyntaxKind.NumericLiteral
     return {
@@ -535,6 +577,7 @@ export class LexerImpl implements Lexer {
     const start = this.pos
     const result = ''
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const ch = this.codePointAt(this.text, this.pos)
       if (this.isDigit(ch)) {
