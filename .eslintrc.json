@@ -3,7 +3,7 @@
 
   "parser": "@typescript-eslint/parser", // Specifies the ESLint parser
 
-  "plugins": ["@typescript-eslint", "jest", "import", "sonarjs"],
+  "plugins": ["@typescript-eslint", "jest", "import", "sonarjs", "jsdoc"],
 
   "env": {
     "node": true,
@@ -53,6 +53,8 @@
     "plugin:promise/recommended",
     "plugin:unicorn/recommended",
     "plugin:sonarjs/recommended",
+
+    "plugin:jsdoc/recommended",
 
     "plugin:prettier/recommended",
     "prettier/@typescript-eslint",
