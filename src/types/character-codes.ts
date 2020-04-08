@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prevent-abbreviations */
 /* eslint-disable unicorn/number-literal-case */
 /* eslint-disable no-magic-numbers */
 // eslint-disable-next-line unicorn/filename-case

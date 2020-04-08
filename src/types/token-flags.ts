@@ -4,17 +4,17 @@ export const enum TokenFlags {
   None = 0,
 
   /**
-   * @internal
+   * @access private
    */
   PrecedingLineBreak = 1 << 0,
 
   /**
-   * @internal
+   * @access private
    */
   Unterminated = 1 << 2,
 
   /**
-   * @internal
+   * @access private
    */
   ExtendedUnicodeEscape = 1 << 3,
 
@@ -49,19 +49,19 @@ export const enum TokenFlags {
   OctalSpecifier = 1 << 8,
 
   /**
-   * @internal
+   * @access private
    * @example
    * e.g. `0b1100_0101`
    */
   ContainsSeparator = 1 << 9,
 
   /**
-   * @internal
+   * @access private
    */
   UnicodeEscape = 1 << 10,
 
   /**
-   * @internal
+   * @access private
    * @example
    * e.g. `\uhello`
    */

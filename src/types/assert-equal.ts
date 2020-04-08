@@ -3,6 +3,7 @@
  * 1- Is T a subtype of Expected?
  * 2- Is Expected a subtype of T?
  * If both are true then T is equal to Expected.
+ *
  * @example
  * function createPoint(x: number, y: number) {
  *  return {x, y};

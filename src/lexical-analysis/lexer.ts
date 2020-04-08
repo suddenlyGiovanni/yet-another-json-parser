@@ -33,13 +33,14 @@ import { createMapFromTemplate } from 'utils/create-map'
  * TODO: remove unnecessary complexity
  * TODO: clean the naming
  * TODO: better error emission
- * @export
+ *
  * @class LexerImpl
  * @implements {Lexer}
  */
 export class LexerImpl implements Lexer {
   /**
    * upper limit of Basic Multilingual Plane (BMP) 65_536
+   *
    * @private
    * @memberof Lexer
    */

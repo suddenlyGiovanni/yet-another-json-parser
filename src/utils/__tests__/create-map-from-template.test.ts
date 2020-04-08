@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import { MapLike } from 'types'
 import { createMapFromTemplate } from 'utils/create-map'
 

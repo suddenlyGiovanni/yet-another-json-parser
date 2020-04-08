@@ -282,6 +282,7 @@
           "order": "alphabetically"
         }
       }
-    ]
+    ],
+    "jsdoc/require-jsdoc": "off"
   }
 }

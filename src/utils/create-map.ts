@@ -1,5 +1,9 @@
-/** Create a new map from a template object is provided, the map will copy entries from it. */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+/**
+ * Create a new map from a template object is provided, the map will copy entries from it.
+ *
+ * @param template
+ */
+
 export function createMapFromTemplate<K extends string | number, T>(
   template: Record<K, T>
 ): Map<K, T> {

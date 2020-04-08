@@ -5,7 +5,7 @@ import { JSONText, SyntaxKind, TokenFlags } from 'types/index'
 import { ErrorCallback } from 'types/lexer'
 
 describe('lexerImpl', () => {
-  const mockOnError = jest.fn(
+  const onErrorMock = jest.fn(
     ((_message: string, _length: number): void => undefined) as ErrorCallback
   )
 
@@ -13,65 +13,10 @@ describe('lexerImpl', () => {
     "property": null
   }`
 
-  function setUpOnError(): typeof mockOnError {
-    mockOnError.mockReset()
-    return mockOnError
+  function setUpOnError(): typeof onErrorMock {
+    onErrorMock.mockReset()
+    return onErrorMock
   }
-
-  it('should not throw if instantiated without any arguments', () => {
-    expect.hasAssertions()
-
-    function instantiateLexer(): LexerImpl {
-      return new LexerImpl()
-    }
-    expect(instantiateLexer).not.toThrow()
-  })
-
-  it('should accepts an optional text, an onError callback fn, a start position, and total text length', () => {
-    expect.hasAssertions()
-
-    const start = 0
-    const { length } = jsonText
-    const onError = setUpOnError()
-    function instantiateLexer(): LexerImpl {
-      return new LexerImpl(jsonText, onError, start, length)
-    }
-    expect(instantiateLexer).not.toThrow()
-  })
-
-  it('should be able to accepts a new `text` to tokenize', () => {
-    expect.hasAssertions()
-    const scanner = new LexerImpl()
-    scanner.setText(jsonText)
-    expect(scanner.getText()).toBe(jsonText)
-  })
-  it('should be able to accepts a new `text` and the position were to start', () => {
-    expect.hasAssertions()
-    const scanner = new LexerImpl()
-    const startPos = 4
-    const { length } = jsonText
-    scanner.setText(jsonText, startPos, length)
-    expect(scanner.getText()).toBe(jsonText)
-  })
-
-  it('should provide a way to set and retrieve the scanner position', () => {
-    expect.hasAssertions()
-    const start = 6
-    const textPos = 17
-    const onError = setUpOnError()
-    const scanner = new LexerImpl(jsonText, onError, start, jsonText.length)
-
-    expect(scanner.getTextPos()).toBe(start)
-    scanner.setTextPos(textPos)
-
-    expect(scanner.getTextPos()).toBe(textPos)
-  })
-
-  it('should return the current token when `getToken` is invoked', () => {
-    expect.hasAssertions()
-    const scanner = new LexerImpl()
-    expect(scanner.getToken()).toBe(SyntaxKind.Unknown)
-  })
 
   describe('scan', () => {
     it('should return `EndOfFileToken` if the scanner has reached the end of text', () => {
