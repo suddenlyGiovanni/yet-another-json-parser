@@ -2,7 +2,7 @@ import { LexerImpl } from 'lexical-analysis/lexer'
 import { SyntaxKind, TokenFlags } from 'types'
 import { ErrorCallback } from 'types/lexer'
 
-describe('lexerImpl - scan - string - A string is a sequence of Unicode code points wrapped with quotation marks (U+0022). All code points may be placed within the quotation marks except for the code points that must be escaped: (quotation mark, reverse solidus, and the control characters)', () => {
+describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code points wrapped with quotation marks (U+0022). All code points may be placed within the quotation marks except for the code points that must be escaped: (quotation mark, reverse solidus, and the control characters)', () => {
   const onErrorMock = jest.fn(
     ((_message: string, _length: number): void => undefined) as ErrorCallback
   )
