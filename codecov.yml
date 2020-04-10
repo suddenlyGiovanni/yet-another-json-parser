@@ -5,6 +5,41 @@ coverage:
   precision: 2
   round: down
   range: '70...100'
+  status:
+    project:
+      default:
+        # basic
+        target: auto
+        threshold: 5%
+        base: auto
+        flags:
+          - unit
+        paths:
+          - 'src'
+        # advanced
+        branches:
+          - master
+        if_not_found: success
+        if_ci_failed: error
+        informational: False
+        only_pulls: false
+    patch:
+      default:
+        # basic
+        target: auto
+        threshold: 0%
+        base: auto
+        # advanced
+        branches:
+          - master
+        if_no_uploads: error
+        if_not_found: success
+        if_ci_failed: error
+        only_pulls: false
+        flags:
+          - 'unit'
+        paths:
+          - 'src'
 
 parsers:
   gcov:
