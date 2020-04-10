@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 import { LexerImpl } from 'lexical-analysis/lexer'
 import { SyntaxKind } from 'types'
 

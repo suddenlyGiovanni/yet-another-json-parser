@@ -14,4 +14,3 @@ export {
   KeywordSyntaxKind,
 } from 'types/syntax-kind'
 export { Lexer } from 'types/lexer'
-

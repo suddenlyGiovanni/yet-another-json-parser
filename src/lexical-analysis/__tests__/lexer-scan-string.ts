@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/number-literal-case */
+/* eslint-disable no-magic-numbers */
 import { LexerImpl } from 'lexical-analysis/lexer'
 import { SyntaxKind, TokenFlags } from 'types'
 import { ErrorCallback } from 'types/lexer'
@@ -275,14 +277,14 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
       scanner.setText('"\\u000A"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000A))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000a))
     })
     it('(U+000B) = VT (Vertical Tabulation)', () => {
       expect.hasAssertions()
       scanner.setText('"\\u000B"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000B))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000b))
     })
 
     it('(U+000C) = FF (Form Feed)', () => {
@@ -290,7 +292,7 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
       scanner.setText('"\\u000C"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000C))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000c))
     })
 
     it('(U+000D) = CR (Carriage Return)', () => {
@@ -298,7 +300,7 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
       scanner.setText('"\\u000D"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000D))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000d))
     })
 
     it('(U+000E) = SO (Shift Out)', () => {
@@ -306,14 +308,14 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
       scanner.setText('"\\u000E"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000E))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000e))
     })
     it('(U+000F) = SI (Shift In)', () => {
       expect.hasAssertions()
       scanner.setText('"\\u000F"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000F))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x000f))
     })
 
     it('(U+0010) = DLE (Data Link Escape)', () => {
@@ -393,42 +395,42 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
       scanner.setText('"\\u001A"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001A))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001a))
     })
     it('(U+001B) = ESC (Escape)', () => {
       expect.hasAssertions()
       scanner.setText('"\\u001B"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001B))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001b))
     })
     it('(U+001C) = FS (File Separator)', () => {
       expect.hasAssertions()
       scanner.setText('"\\u001C"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001C))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001c))
     })
     it('(U+001D) = GS (Group Separator)', () => {
       expect.hasAssertions()
       scanner.setText('"\\u001D"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001D))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001d))
     })
     it('(U+001E) = RS (Record Separator)', () => {
       expect.hasAssertions()
       scanner.setText('"\\u001E"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001E))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001e))
     })
     it('(U+001F) = US (Unit Separator)', () => {
       expect.hasAssertions()
       scanner.setText('"\\u001F"')
       expect(scanner.scan()).toBe(SyntaxKind.StringLiteral)
       expect(scanner.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
-      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001F))
+      expect(scanner.getTokenValue()).toBe(String.fromCharCode(0x001f))
     })
   })
 

@@ -121,6 +121,7 @@ export class LexerImpl implements Lexer {
     return this.tokenFlags === TokenFlags.PrecedingLineBreak
   }
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   public scan(): SyntaxKind {
     this.startPos = this.pos
     // eslint-disable-next-line no-constant-condition, sonarjs/no-one-iteration-loop
@@ -128,23 +129,16 @@ export class LexerImpl implements Lexer {
       this.tokenPos = this.pos
 
       if (this.pos >= this.end) {
-        // TODO: log to check if we end up in this case, please remove it!!
-        console.log(this.pos, this.end)
         this.token = SyntaxKind.EndOfFileToken
         return this.token
       }
 
       let ch: number = this.codePointAt(this.text, this.pos)
 
-      console.log(
-        `unicode position (${ch}) equivalent to character (${String.fromCharCode(
-          ch
-        )})`
-      )
       switch (ch) {
         case CharacterCodes.lineFeed:
         case CharacterCodes.carriageReturn:
-          this.tokenFlags = TokenFlags.PrecedingLineBreak
+          this.tokenFlags |= TokenFlags.PrecedingLineBreak
           if (
             isCarriageReturnChr(ch) &&
             this.pos + 1 < this.end &&
@@ -204,7 +198,6 @@ export class LexerImpl implements Lexer {
           return this.token
 
         case CharacterCodes.doubleQuote:
-          // TODO: enable this:
           this.tokenValue = this.scanString()
           this.token = SyntaxKind.StringLiteral
           return this.token
@@ -252,19 +245,17 @@ export class LexerImpl implements Lexer {
             // eslint-disable-next-line no-continue
             continue
           } else if (this.isLineBreak(ch)) {
-            this.tokenFlags = TokenFlags.PrecedingLineBreak
+            this.tokenFlags |= TokenFlags.PrecedingLineBreak
             this.pos += this.charSize(ch)
             // eslint-disable-next-line no-continue
             continue
           }
-          // TODO: Remove this Fall through console log
-          // eslint-disable-next-line no-console
-          console.log(
-            `could not match unicode position (${ch}) equivalent to character (${String.fromCharCode(
+
+          this.error(
+            `invalid character.\ncould not match unicode position (${ch}) equivalent to character (${String.fromCharCode(
               ch
             )})`
           )
-          this.error('invalid character')
           this.pos += this.charSize(ch)
           this.token = SyntaxKind.Unknown
           return this.token
@@ -419,9 +410,8 @@ export class LexerImpl implements Lexer {
       case CharacterCodes.doubleQuote:
         return '"'
 
-      // TODO: implement UnicodeEscape
       case CharacterCodes.u:
-        this.tokenFlags = TokenFlags.UnicodeEscape
+        this.tokenFlags |= TokenFlags.UnicodeEscape
         /* '\uDDDD' */
         return this.scanHexadecimalEscape()
 
@@ -527,8 +517,8 @@ export class LexerImpl implements Lexer {
       this.codePointAt(this.text, this.pos) === CharacterCodes.e
     ) {
       this.pos += 1
-      // eslint-disable-next-line operator-assignment
-      this.tokenFlags = this.tokenFlags | TokenFlags.Scientific
+
+      this.tokenFlags |= TokenFlags.Scientific
       if (
         this.codePointAt(this.text, this.pos) === CharacterCodes.plus ||
         this.codePointAt(this.text, this.pos) === CharacterCodes.minus
@@ -602,7 +592,7 @@ export class LexerImpl implements Lexer {
     while (true) {
       if (this.pos >= this.end) {
         result += this.text.substring(start, this.pos)
-        this.tokenFlags = TokenFlags.Unterminated
+        this.tokenFlags |= TokenFlags.Unterminated
         this.error('Unterminated string literal')
         break
       }
@@ -624,7 +614,7 @@ export class LexerImpl implements Lexer {
 
       if (this.isLineBreak(ch)) {
         result += this.text.substring(start, this.pos)
-        this.tokenFlags = TokenFlags.Unterminated
+        this.tokenFlags |= TokenFlags.Unterminated
         this.error('Unterminated string literal')
         break
       }

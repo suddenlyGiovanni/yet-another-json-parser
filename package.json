@@ -56,8 +56,9 @@
     "typecheck": "tsc --project tsconfig.json --incremental false --noEmit ",
     "test": "jest",
     "test-types": "dtslint --expectOnly --localTs node_modules/typescript/lib types",
-    "clean": "rm -rf lib",
-    "purge-node_modules": "rm -rf node_modules"
+    "clean:lib": "rm -rf lib",
+    "clean:jest": "jest --clearCache",
+    "clean:node_modules": "rm -rf node_modules"
   },
   "config": {
     "commitizen": {

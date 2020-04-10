@@ -52,13 +52,18 @@ module.exports = function wallabyConfig(wallaby) {
         load: false,
         pattern: 'src/**/*.test.ts',
       },
+      {
+        ignore: true,
+        instrument: false,
+        load: false,
+        pattern: '**/__tests__/*.ts',
+      },
     ],
-
 
     lowCoverageThreshold: 80,
     reportConsoleErrorAsError: true,
     runMode: 'onsave',
     testFramework: 'jest',
-    tests: ['src/**/*.spec.ts', 'src/**/*.test.ts'],
+    tests: ['src/**/*.spec.ts', 'src/**/*.test.ts', '**/__tests__/*.ts'],
   }
 }
