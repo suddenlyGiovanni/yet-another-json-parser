@@ -10,7 +10,8 @@ export const JSONtoStringify: JSONValue = {
     arrays: [null, true, false, 'string', 1e-100, {}, []],
     false: false,
     null: null,
-    numbers: [+100, -100, +0.001, -0.0001, +1e100, -1e-100],
+    // eslint-disable-next-line prettier/prettier, unicorn/number-literal-case
+    numbers: [+100, -100, 0.001, -0.0001, 1e100, 0.1E+34, -1e-100],
     objects: {
       array: [],
       false: false,
@@ -37,4 +38,4 @@ export const JSONtoStringify: JSONValue = {
   arrayLiteral: [null, true, false, 'string', 1e-100, {}, []],
 }
 
-export const text: JSONText = JSON.stringify(JSONtoStringify, null, 2)
+export const text: JSONText = JSON.stringify(JSONtoStringify, null, 2) // ?
