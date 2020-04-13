@@ -1,7 +1,8 @@
 {
   "name": "yet-another-json-parser",
   "version": "0.0.3",
-  "main": "src/index.ts",
+  "main": "lib/index",
+  "typings": "lib/index",
   "author": "suddenlyGiovanni <ravalico.giovanni@gmail.com>",
   "license": "MIT",
   "description": "",
@@ -55,8 +56,9 @@
     "typecheck": "tsc --project tsconfig.json --incremental false --noEmit ",
     "test": "jest",
     "test-types": "dtslint --expectOnly --localTs node_modules/typescript/lib types",
-    "clean": "rm -rf lib",
-    "purge-node_modules": "rm -rf node_modules"
+    "clean:lib": "rm -rf lib",
+    "clean:jest": "jest --clearCache",
+    "clean:node_modules": "rm -rf node_modules"
   },
   "config": {
     "commitizen": {

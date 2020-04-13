@@ -1,3 +1,1 @@
-export function add(a: number): (b: number) => number {
-  return (b: number): number => a + b
-}
+export { LexerImpl as Lexer } from 'lexical-analysis/lexer'
