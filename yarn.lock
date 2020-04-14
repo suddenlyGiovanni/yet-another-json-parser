@@ -5926,7 +5926,12 @@ typescript@^3.7.5:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
   integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
 
-typescript@^3.9.0-beta, typescript@next:
+typescript@^3.9.0-beta:
+  version "3.9.0-dev.20200414"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.0-dev.20200414.tgz#41f41f84b343c7ab98229ed85aa3bb88b3ddd68d"
+  integrity sha512-wqAPcJUX4SPnySVpP58Vh09b4ncxxHdwP9HaPP9YTaOGHS3PyychJcbvMBqlKVXdvBvhHoacVDSB0Agn2zu4hA==
+
+typescript@next:
   version "3.9.0-dev.20200410"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.0-dev.20200410.tgz#b30251c1f5f5ea75ae5140881c41e799c7283897"
   integrity sha512-s9MrehZwFqJoRVVubYbwJNtFUIdi4we8YbASpi+zW4VM2Rb5E6mKn2DWfKonaBrwgjXXghePUUQHczG56Xqjnw==
