@@ -54,6 +54,16 @@ export class LexerImpl implements Lexer {
   /** Current position (end position of text of current token) */
   private pos!: number
 
+  /**
+   * a boolean flag that tells the lexer how it  should treat meaningless whitespace
+   *
+   * @private
+   * @type {boolean}
+   * @memberof LexerImpl
+   */
+  // @ts-ignore
+  private skipTrivia: boolean
+
   /** Start position of whitespace before current token */
   // @ts-ignore
   private startPos!: number
@@ -78,11 +88,13 @@ export class LexerImpl implements Lexer {
     textInitial?: JSONText,
     onError?: ErrorCallback,
     start?: number,
-    length?: number
+    length?: number,
+    skipTrivia?: boolean
   ) {
     this.onError = onError
     this.setText(textInitial, start, length)
     this.tokenFlags = TokenFlags.None
+    this.skipTrivia = skipTrivia ?? true
   }
 
   public getStartPos(): number {
@@ -500,7 +512,10 @@ export class LexerImpl implements Lexer {
     return ''
   }
 
-  private scanNumber(): { type: SyntaxKind.NumericLiteral; value: string } {
+  private scanNumber(): {
+    type: SyntaxKind.NumericLiteral
+    value: string
+  } {
     const start = this.pos
     this.scanNumberFragment()
     let decimalFragment: string | undefined
