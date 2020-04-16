@@ -61,7 +61,6 @@ export class LexerImpl implements Lexer {
    * @type {boolean}
    * @memberof LexerImpl
    */
-  // @ts-ignore
   private skipTrivia: boolean
 
   /** Start position of whitespace before current token */
@@ -136,6 +135,7 @@ export class LexerImpl implements Lexer {
   // eslint-disable-next-line sonarjs/cognitive-complexity
   public scan(): SyntaxKind {
     this.startPos = this.pos
+    this.tokenFlags = TokenFlags.None
     // eslint-disable-next-line no-constant-condition, sonarjs/no-one-iteration-loop
     while (true) {
       this.tokenPos = this.pos
@@ -151,6 +151,11 @@ export class LexerImpl implements Lexer {
         case CharacterCodes.lineFeed:
         case CharacterCodes.carriageReturn:
           this.tokenFlags |= TokenFlags.PrecedingLineBreak
+          if (this.skipTrivia) {
+            this.pos += 1
+            // eslint-disable-next-line no-continue
+            continue
+          }
           if (
             isCarriageReturnChr(ch) &&
             this.pos + 1 < this.end &&
