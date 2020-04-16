@@ -1,7 +1,7 @@
 // eslint-disable-next-line jest/no-mocks-import
 import { text } from 'lexical-analysis/__mocks__/index'
 import { LexerImpl } from 'lexical-analysis/lexer'
-import { ErrorCallback } from 'types/lexer'
+import { ErrorCallback, Lexer } from 'types/lexer'
 
 describe('lexerImpl - instantiation', () => {
   const onErrorMock = jest.fn(
@@ -12,21 +12,25 @@ describe('lexerImpl - instantiation', () => {
     onErrorMock.mockReset()
     return onErrorMock
   }
+
+  const stringElementToMatch = '"JSONValueGrammar"'
+  const textStartPos = text.search(new RegExp(stringElementToMatch))
+
   it('should allow the user to create `a new instance` of LexerImpl `without specifying any parameters`', () => {
     // arrange
     expect.hasAssertions()
-    const instantiateLexer = (): LexerImpl => new LexerImpl()
+    const createLexer = (): Lexer => new LexerImpl()
     // assert
-    expect(instantiateLexer).not.toThrow()
+    expect(createLexer).not.toThrow()
   })
 
   it('should allow the user to create `a new instance` of LexerImpl and provide a `text` to be parsed', () => {
     // arrange
     expect.hasAssertions()
     // act
-    const instantiateLexer = (): LexerImpl => new LexerImpl(text)
+    const createLexer = (): Lexer => new LexerImpl(text)
     // assert
-    expect(instantiateLexer).not.toThrow()
+    expect(createLexer).not.toThrow()
   })
 
   it('should allow the user to create `a new instance` of LexerImpl with `text` and an `onError` callback function', () => {
@@ -34,35 +38,39 @@ describe('lexerImpl - instantiation', () => {
     expect.hasAssertions()
     const onError = setUpOnError()
     // act
-    const instantiateLexer = (): LexerImpl => new LexerImpl(text, onError)
+    const createLexer = (): Lexer => new LexerImpl(text, onError)
     // assert
-    expect(instantiateLexer).not.toThrow()
+    expect(createLexer).not.toThrow()
   })
 
   it('should allow the user to create `a new instance` of LexerImpl with `text`,`onError` and a `start` position for the lexer', () => {
     // arrange
     expect.hasAssertions()
-    const onError = setUpOnError()
 
-    const start = text.search(/"JSONValueGrammar"/)
     // act
-    const instantiateLexer = (): LexerImpl =>
-      new LexerImpl(text, onError, start)
+    const createLexer = (): Lexer =>
+      new LexerImpl(text, setUpOnError(), textStartPos)
     // assert
-    expect(instantiateLexer).not.toThrow()
+    expect(createLexer).not.toThrow()
   })
 
   it('should allow the user to create `a new instance` of LexerImpl with `text`,`onError`, `start` and `end` position for the lexer', () => {
     // arrange
     expect.hasAssertions()
-    const onError = setUpOnError()
-
-    const start = text.search(/"JSONValueGrammar"/)
     const end = text.indexOf('}')
     // act
-    const instantiateLexer = (): LexerImpl =>
-      new LexerImpl(text, onError, start, end)
+    const instantiateLexer = (): Lexer =>
+      new LexerImpl(text, setUpOnError(), textStartPos, end)
     // assert
     expect(instantiateLexer).not.toThrow()
+  })
+
+  it('should allow the user to create `a new instance` of LexerImpl and specify how whitespaces should be handled', () => {
+    // arrange
+    expect.hasAssertions()
+    const createLexer = (): Lexer =>
+      new LexerImpl(text, setUpOnError(), textStartPos, text.length, true)
+    // assert
+    expect(createLexer).not.toThrow()
   })
 })
