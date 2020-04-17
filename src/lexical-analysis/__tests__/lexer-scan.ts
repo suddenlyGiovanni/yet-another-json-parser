@@ -136,7 +136,8 @@ describe('lexerImpl - scan', () => {
       textWithWhiteSpaces,
       onError,
       textStartPos,
-      textEndPos
+      textEndPos,
+      false
     )
     // act
     lexer.scan()

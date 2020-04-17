@@ -42,7 +42,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -59,7 +58,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -76,7 +74,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -94,7 +91,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -111,7 +107,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -128,7 +123,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -145,7 +139,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -162,7 +155,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -180,7 +172,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert

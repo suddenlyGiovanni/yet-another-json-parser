@@ -29,7 +29,7 @@ import { createMapFromTemplate } from 'utils/create-map'
 
 /**
  * DONE:(whitespace, curly brackets, square brackets, colum, comma, string, null, true, false)
- * TODO: numbers
+ * DONE: numbers
  * TODO: remove unnecessary complexity
  * TODO: clean the naming
  * TODO: better error emission
@@ -174,14 +174,20 @@ export class LexerImpl implements Lexer {
         case CharacterCodes.verticalTab:
         case CharacterCodes.space:
         case CharacterCodes.formFeed:
-          while (
-            this.pos < this.end &&
-            this.isWhiteSpaceSingleLine(this.codePointAt(this.text, this.pos))
-          ) {
+          if (this.skipTrivia) {
             this.pos += 1
+            // eslint-disable-next-line no-continue
+            continue
+          } else {
+            while (
+              this.pos < this.end &&
+              this.isWhiteSpaceSingleLine(this.codePointAt(this.text, this.pos))
+            ) {
+              this.pos += 1
+            }
+            this.token = SyntaxKind.WhitespaceTrivia
+            return this.token
           }
-          this.token = SyntaxKind.WhitespaceTrivia
-          return this.token
 
         //  structural tokens:
         case CharacterCodes.openBracket:

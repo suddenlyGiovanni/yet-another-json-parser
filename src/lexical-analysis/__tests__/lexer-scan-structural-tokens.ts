@@ -53,9 +53,7 @@ describe('lexerImpl - scan - structural tokens', () => {
     // act
     lexer.scan()
     // assert
-    expect(lexer.getToken()).not.toBe(SyntaxKind.Colon)
-    expect(lexer.scan()).toBe(SyntaxKind.Colon)
-    expect(lexer.scan()).not.toBe(SyntaxKind.Colon)
+    expect(lexer.getToken()).toBe(SyntaxKind.Colon)
   })
 
   it('should return `SyntaxKind.Comma` when encountering a comma `,`', () => {
@@ -63,12 +61,14 @@ describe('lexerImpl - scan - structural tokens', () => {
     expect.hasAssertions()
     const text = '"key": "a, b, c",'
     const lexer = new LexerImpl(text)
+    // act
+    lexer.scan() // key
+    lexer.scan() // colum
+    lexer.scan() // StringLiteral
+    lexer.scan()
     // assert
-    expect(lexer.scan()).not.toBe(SyntaxKind.Comma)
-    expect(lexer.scan()).not.toBe(SyntaxKind.Comma)
-    expect(lexer.scan()).toBe(SyntaxKind.WhitespaceTrivia)
-    expect(lexer.scan()).not.toBe(SyntaxKind.Comma)
-    expect(lexer.scan()).toBe(SyntaxKind.Comma)
+    expect(lexer.getToken()).toBe(SyntaxKind.Comma)
+    expect(lexer.getTokenText()).toBe(',')
     expect(lexer.getTextPos()).toBe(text.length)
   })
 })
