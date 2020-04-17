@@ -121,4 +121,6 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+tsconfig.tsbuildinfo
+
 # End of https://www.gitignore.io/api/node,macos
