@@ -42,7 +42,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -59,7 +58,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -76,7 +74,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -94,7 +91,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -111,7 +107,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -128,7 +123,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -145,7 +139,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -162,7 +155,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -180,7 +172,6 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // act
     lexer.scan() // key
     lexer.scan() // :
-    lexer.scan() // whitespace trivia
     lexer.scan()
 
     // assert
@@ -190,7 +181,9 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
   })
 
   describe('should handle string with hexadecimal escapes control characters from (U+0000) to (U+001F)', () => {
-    const lexer = new LexerImpl(text, setUpOnError())
+    const start = text.search(/"hexadecimal escapes control characters"/) // ?
+    const end = text.length
+    const lexer = new LexerImpl(text, setUpOnError(), start, end, false)
     it('(U+0000) = NULL', () => {
       // arrange
       expect.hasAssertions()
@@ -358,7 +351,10 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
       lexer.scan()
       // assert
       expect(lexer.getToken()).toBe(SyntaxKind.StringLiteral)
+      /*
+      NOTE: JSON.stringify coerces known escape sequences as /u0009 to /t
       expect(lexer.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
+      */
       expect(lexer.getTokenValue()).toBe(String.fromCharCode(0x0009))
       expect(lexer.getTokenText()).toMatch(/"\\t"/)
     })
@@ -375,7 +371,10 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
       lexer.scan()
       // assert
       expect(lexer.getToken()).toBe(SyntaxKind.StringLiteral)
+      /*
+      NOTE: JSON.stringify coerces known escape sequences as /u000A to /n
       expect(lexer.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
+      */
       expect(lexer.getTokenValue()).toBe(String.fromCharCode(0x000a))
       expect(lexer.getTokenText()).toMatch(/"\\n"/)
     })
@@ -410,7 +409,10 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
       lexer.scan()
       // assert
       expect(lexer.getToken()).toBe(SyntaxKind.StringLiteral)
+      /*
+      NOTE: JSON.stringify coerces known escape sequences as /u000C to /f
       expect(lexer.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
+      */
       expect(lexer.getTokenValue()).toBe(String.fromCharCode(0x000c))
       expect(lexer.getTokenText()).toMatch(/"\\f"/)
     })
@@ -427,7 +429,10 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
       lexer.scan()
       // assert
       expect(lexer.getToken()).toBe(SyntaxKind.StringLiteral)
+      /*
+      NOTE: JSON.stringify coerces known escape sequences as /u000D to
       expect(lexer.getTokenFlags()).toBe(TokenFlags.UnicodeEscape)
+      */
       expect(lexer.getTokenValue()).toBe(String.fromCharCode(0x000d))
       expect(lexer.getTokenText()).toMatch(/"\\r"/)
     })

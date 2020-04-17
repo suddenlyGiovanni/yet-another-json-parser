@@ -29,7 +29,7 @@ import { createMapFromTemplate } from 'utils/create-map'
 
 /**
  * DONE:(whitespace, curly brackets, square brackets, colum, comma, string, null, true, false)
- * TODO: numbers
+ * DONE: numbers
  * TODO: remove unnecessary complexity
  * TODO: clean the naming
  * TODO: better error emission
@@ -53,6 +53,15 @@ export class LexerImpl implements Lexer {
 
   /** Current position (end position of text of current token) */
   private pos!: number
+
+  /**
+   * a boolean flag that tells the lexer how it  should treat meaningless whitespace
+   *
+   * @private
+   * @type {boolean}
+   * @memberof LexerImpl
+   */
+  private skipTrivia: boolean
 
   /** Start position of whitespace before current token */
   // @ts-ignore
@@ -78,11 +87,13 @@ export class LexerImpl implements Lexer {
     textInitial?: JSONText,
     onError?: ErrorCallback,
     start?: number,
-    length?: number
+    length?: number,
+    skipTrivia?: boolean
   ) {
     this.onError = onError
     this.setText(textInitial, start, length)
     this.tokenFlags = TokenFlags.None
+    this.skipTrivia = skipTrivia ?? true
   }
 
   public getStartPos(): number {
@@ -124,6 +135,7 @@ export class LexerImpl implements Lexer {
   // eslint-disable-next-line sonarjs/cognitive-complexity
   public scan(): SyntaxKind {
     this.startPos = this.pos
+    this.tokenFlags = TokenFlags.None
     // eslint-disable-next-line no-constant-condition, sonarjs/no-one-iteration-loop
     while (true) {
       this.tokenPos = this.pos
@@ -139,6 +151,11 @@ export class LexerImpl implements Lexer {
         case CharacterCodes.lineFeed:
         case CharacterCodes.carriageReturn:
           this.tokenFlags |= TokenFlags.PrecedingLineBreak
+          if (this.skipTrivia) {
+            this.pos += 1
+            // eslint-disable-next-line no-continue
+            continue
+          }
           if (
             isCarriageReturnChr(ch) &&
             this.pos + 1 < this.end &&
@@ -157,14 +174,20 @@ export class LexerImpl implements Lexer {
         case CharacterCodes.verticalTab:
         case CharacterCodes.space:
         case CharacterCodes.formFeed:
-          while (
-            this.pos < this.end &&
-            this.isWhiteSpaceSingleLine(this.codePointAt(this.text, this.pos))
-          ) {
+          if (this.skipTrivia) {
             this.pos += 1
+            // eslint-disable-next-line no-continue
+            continue
+          } else {
+            while (
+              this.pos < this.end &&
+              this.isWhiteSpaceSingleLine(this.codePointAt(this.text, this.pos))
+            ) {
+              this.pos += 1
+            }
+            this.token = SyntaxKind.WhitespaceTrivia
+            return this.token
           }
-          this.token = SyntaxKind.WhitespaceTrivia
-          return this.token
 
         //  structural tokens:
         case CharacterCodes.openBracket:
@@ -500,7 +523,10 @@ export class LexerImpl implements Lexer {
     return ''
   }
 
-  private scanNumber(): { type: SyntaxKind.NumericLiteral; value: string } {
+  private scanNumber(): {
+    type: SyntaxKind.NumericLiteral
+    value: string
+  } {
     const start = this.pos
     this.scanNumberFragment()
     let decimalFragment: string | undefined

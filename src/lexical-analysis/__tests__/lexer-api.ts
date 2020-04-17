@@ -19,61 +19,6 @@ describe('lexerImpl - API', () => {
   const stringElementToMatch = '"JSONValueGrammar"'
   const textStartPos = text.search(new RegExp(stringElementToMatch))
 
-  describe('lexer instantiation', () => {
-    it('should allow for no parameters specification', () => {
-      // arrange
-      expect.hasAssertions()
-      const instantiateLexer = (): LexerImpl => new LexerImpl()
-      // assert
-      expect(instantiateLexer).not.toThrow()
-    })
-
-    it('should allow for `text` to be specified', () => {
-      // arrange
-      expect.hasAssertions()
-      // act
-      const instantiateLexer = (): LexerImpl => new LexerImpl(text)
-      // assert
-      expect(instantiateLexer).not.toThrow()
-    })
-
-    it('should allow for `text` and an `onError` callback function to be specified,', () => {
-      // arrange
-      expect.hasAssertions()
-      const onError = setUpOnError()
-      // act
-      const instantiateLexer = (): LexerImpl => new LexerImpl(text, onError)
-      // assert
-      expect(instantiateLexer).not.toThrow()
-    })
-
-    it('should allow for `text`,`onError` and `start` position of lexing to be specified,', () => {
-      // arrange
-      expect.hasAssertions()
-      const onError = setUpOnError()
-
-      const start = text.search(/"JSONValueGrammar"/)
-      // act
-      const instantiateLexer = (): LexerImpl =>
-        new LexerImpl(text, onError, start)
-      // assert
-      expect(instantiateLexer).not.toThrow()
-    })
-
-    it('should allow for `text`,`onError`, `start` and `end` position of lexing to be specified,', () => {
-      // arrange
-      expect.hasAssertions()
-      const onError = setUpOnError()
-
-      const start = text.search(/"JSONValueGrammar"/)
-      const end = text.indexOf('}')
-      // act
-      const instantiateLexer = (): LexerImpl =>
-        new LexerImpl(text, onError, start, end)
-      // assert
-      expect(instantiateLexer).not.toThrow()
-    })
-  })
 
   describe('public API', () => {
     it('should allow the user to `retrieve` the whole `text` to provided to the lexer (`getText`)', () => {

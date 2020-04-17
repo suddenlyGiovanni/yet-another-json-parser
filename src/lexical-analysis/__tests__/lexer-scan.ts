@@ -65,7 +65,13 @@ describe('lexerImpl - scan', () => {
     expect.hasAssertions()
     const textStartPos = text.search(/\n/)
     const textEndPos = text.length
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos, textEndPos)
+    const lexer = new LexerImpl(
+      text,
+      setUpOnError(),
+      textStartPos,
+      textEndPos,
+      false
+    )
     // act
     lexer.scan()
     // assert
@@ -84,7 +90,8 @@ describe('lexerImpl - scan', () => {
       textWithCarriageReturn,
       setUpOnError(),
       textStartPos,
-      textEndPos
+      textEndPos,
+      false
     )
     // act
     lexer.scan()
@@ -105,7 +112,8 @@ describe('lexerImpl - scan', () => {
       textWithCarriageReturnAndLineFeed,
       setUpOnError(),
       textStartPos,
-      textEndPos
+      textEndPos,
+      false
     )
     // act
     lexer.scan()
@@ -128,7 +136,8 @@ describe('lexerImpl - scan', () => {
       textWithWhiteSpaces,
       onError,
       textStartPos,
-      textEndPos
+      textEndPos,
+      false
     )
     // act
     lexer.scan()
