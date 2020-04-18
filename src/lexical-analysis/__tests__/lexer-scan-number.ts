@@ -18,7 +18,11 @@ describe('lexerImpl - scan - number:\n A number is a sequence of decimal digits 
     // arrange
     expect.hasAssertions()
     const textStartPos = text.search(/100/)
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
     // act
     lexer.scan()
     // assert
@@ -30,7 +34,11 @@ describe('lexerImpl - scan - number:\n A number is a sequence of decimal digits 
     // arrange
     expect.hasAssertions()
     const startTextPos = text.search(/-100/) // ?
-    const lexer = new LexerImpl(text, setUpOnError(), startTextPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: startTextPos,
+      textInitial: text,
+    })
     // act
     lexer.scan()
     // assert
@@ -42,7 +50,11 @@ describe('lexerImpl - scan - number:\n A number is a sequence of decimal digits 
     // arrange
     expect.hasAssertions()
     const startTextPos = text.search(/0.001/)
-    const lexer = new LexerImpl(text, setUpOnError(), startTextPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: startTextPos,
+      textInitial: text,
+    })
     // act
     lexer.scan()
     // assert
@@ -56,7 +68,11 @@ describe('lexerImpl - scan - number:\n A number is a sequence of decimal digits 
       // arrange
       expect.hasAssertions()
       const textStartPos = text.search(/1e\+100/)
-      const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+      const lexer = new LexerImpl({
+        onError: setUpOnError(),
+        start: textStartPos,
+        textInitial: text,
+      })
       // act
       lexer.scan()
       // assert
@@ -68,7 +84,7 @@ describe('lexerImpl - scan - number:\n A number is a sequence of decimal digits 
     it('should handle `0.1E+34` as input', () => {
       // arrange
       expect.hasAssertions()
-      const lexer = new LexerImpl('0.1E+34')
+      const lexer = new LexerImpl({ textInitial: '0.1E+34' })
       // act
       lexer.scan()
       // assert
@@ -81,7 +97,11 @@ describe('lexerImpl - scan - number:\n A number is a sequence of decimal digits 
       expect.hasAssertions()
       // eslint-disable-next-line prettier/prettier
       const textStartPos = text.search(/-1e-100/) // ?
-      const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+      const lexer = new LexerImpl({
+        onError: setUpOnError(),
+        start: textStartPos,
+        textInitial: text,
+      })
       // act
       lexer.scan()
       // assert
