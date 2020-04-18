@@ -83,17 +83,29 @@ export class LexerImpl implements Lexer {
   // @ts-ignore
   private tokenValue!: string
 
-  public constructor(
-    textInitial?: JSONText,
-    onError?: ErrorCallback,
-    start?: number,
-    length?: number,
+  public constructor(lexerOptions?: {
+    length?: number
+    onError?: ErrorCallback
     skipTrivia?: boolean
-  ) {
-    this.onError = onError
-    this.setText(textInitial, start, length)
+    start?: number
+    textInitial?: JSONText
+  }) {
+    if (
+      typeof lexerOptions !== 'undefined' &&
+      typeof lexerOptions !== 'object'
+    ) {
+      throw new TypeError(
+        `LexerImp constructor optionally requires a configuration object as parameter instead received  ${typeof lexerOptions}`
+      )
+    }
+    this.onError = lexerOptions?.onError
+    this.setText(
+      lexerOptions?.textInitial,
+      lexerOptions?.start,
+      lexerOptions?.length
+    )
     this.tokenFlags = TokenFlags.None
-    this.skipTrivia = skipTrivia ?? true
+    this.skipTrivia = lexerOptions?.skipTrivia ?? true
   }
 
   public getStartPos(): number {

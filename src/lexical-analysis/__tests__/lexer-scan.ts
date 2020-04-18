@@ -19,7 +19,12 @@ describe('lexerImpl - scan', () => {
     expect.hasAssertions()
     const textStartPos = text.length
     const textEndPos = text.length
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos, textEndPos)
+    const lexer = new LexerImpl({
+      length: textEndPos,
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
     // act
     lexer.scan()
     // assert
@@ -32,7 +37,7 @@ describe('lexerImpl - scan', () => {
     const textInitial = `💥🧨`
 
     const onError = setUpOnError()
-    const lexer = new LexerImpl(textInitial, onError)
+    const lexer = new LexerImpl({ onError, textInitial })
     // act
     lexer.scan()
     // assert
@@ -50,7 +55,7 @@ describe('lexerImpl - scan', () => {
     const illegalText = String.fromCodePoint(
       chCodePointOutOfBasicMultilingualPlane
     )
-    const scanner = new LexerImpl(illegalText, onError)
+    const scanner = new LexerImpl({ onError, textInitial: illegalText })
     // act
     scanner.scan()
     // expect
@@ -65,13 +70,13 @@ describe('lexerImpl - scan', () => {
     expect.hasAssertions()
     const textStartPos = text.search(/\n/)
     const textEndPos = text.length
-    const lexer = new LexerImpl(
-      text,
-      setUpOnError(),
-      textStartPos,
-      textEndPos,
-      false
-    )
+    const lexer = new LexerImpl({
+      length: textEndPos,
+      onError: setUpOnError(),
+      skipTrivia: false,
+      start: textStartPos,
+      textInitial: text,
+    })
     // act
     lexer.scan()
     // assert
@@ -86,13 +91,13 @@ describe('lexerImpl - scan', () => {
     const textWithCarriageReturn = `text with carriage return\r`
     const textStartPos = textWithCarriageReturn.search(/\r/)
     const textEndPos = textWithCarriageReturn.length
-    const lexer = new LexerImpl(
-      textWithCarriageReturn,
-      setUpOnError(),
-      textStartPos,
-      textEndPos,
-      false
-    )
+    const lexer = new LexerImpl({
+      length: textEndPos,
+      onError: setUpOnError(),
+      skipTrivia: false,
+      start: textStartPos,
+      textInitial: textWithCarriageReturn,
+    })
     // act
     lexer.scan()
     // assert
@@ -108,13 +113,13 @@ describe('lexerImpl - scan', () => {
     const textWithCarriageReturnAndLineFeed = `text with carriage return and line feed\r\n`
     const textStartPos = textWithCarriageReturnAndLineFeed.search(/\r/)
     const textEndPos = textWithCarriageReturnAndLineFeed.length
-    const lexer = new LexerImpl(
-      textWithCarriageReturnAndLineFeed,
-      setUpOnError(),
-      textStartPos,
-      textEndPos,
-      false
-    )
+    const lexer = new LexerImpl({
+      length: textEndPos,
+      onError: setUpOnError(),
+      skipTrivia: false,
+      start: textStartPos,
+      textInitial: textWithCarriageReturnAndLineFeed,
+    })
     // act
     lexer.scan()
     // assert
@@ -132,13 +137,13 @@ describe('lexerImpl - scan', () => {
     const textWithWhiteSpaces = 'text  \f\v\twith whites space'
     const textStartPos = textWithWhiteSpaces.search(/text/) + 'text'.length // ?
     const textEndPos = textWithWhiteSpaces.length
-    const lexer = new LexerImpl(
-      textWithWhiteSpaces,
+    const lexer = new LexerImpl({
+      length: textEndPos,
       onError,
-      textStartPos,
-      textEndPos,
-      false
-    )
+      skipTrivia: false,
+      start: textStartPos,
+      textInitial: textWithWhiteSpaces,
+    })
     // act
     lexer.scan()
     // assert
@@ -150,7 +155,11 @@ describe('lexerImpl - scan', () => {
     // arrange
     expect.hasAssertions()
     const textStartPos = text.search(/-100/)
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
     // act
     lexer.scan()
     // assert

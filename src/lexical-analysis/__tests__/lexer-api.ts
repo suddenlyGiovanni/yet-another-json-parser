@@ -19,19 +19,18 @@ describe('lexerImpl - API', () => {
   const stringElementToMatch = '"JSONValueGrammar"'
   const textStartPos = text.search(new RegExp(stringElementToMatch))
 
-
   describe('public API', () => {
     it('should allow the user to `retrieve` the whole `text` to provided to the lexer (`getText`)', () => {
       // arrange
       expect.hasAssertions()
-      const lexer = new LexerImpl(text)
+      const lexer = new LexerImpl({ textInitial: text })
       // assert
       expect(lexer.getText()).toBe(text)
     })
 
     it('should allow the user to tokenize the next sensible text part (`scan`)', () => {
       expect.hasAssertions()
-      const { scan } = new LexerImpl(text)
+      const { scan } = new LexerImpl({ textInitial: text })
       expect(scan).toBeDefined()
     })
 
@@ -40,7 +39,7 @@ describe('lexerImpl - API', () => {
       it('should allow the user to `get` `the start position` of the current token (`getTokenPos`)', () => {
         // arrange
         expect.hasAssertions()
-        const lexer = new LexerImpl(text, setUpOnError(), textStartPos) // ["]JSONValueGrammar": ...
+        const lexer = new LexerImpl({ start: textStartPos, textInitial: text }) // ["]JSONValueGrammar": ...
         // act
         lexer.scan() // "[JSONValueGrammar]"
         const tokenPos = lexer.getTokenPos()
@@ -53,7 +52,7 @@ describe('lexerImpl - API', () => {
       it('should allow the user to `get` `the end position of text` for the current token (`getTextPos`)', () => {
         // arrange
         expect.hasAssertions()
-        const lexer = new LexerImpl(text, setUpOnError(), textStartPos) // ["]JSONValueGrammar": ...
+        const lexer = new LexerImpl({ start: textStartPos, textInitial: text }) // ["]JSONValueGrammar": ...
         // act
         lexer.scan() // "[JSONValueGrammar]": ...
         const textPos = lexer.getTextPos() // "JSONValueGrammar"[:] ...
@@ -66,7 +65,7 @@ describe('lexerImpl - API', () => {
       it('should allow the user to `get` the `start position` of whitespace for the current token (`getStartPos`)', () => {
         // arrange
         expect.hasAssertions()
-        const lexer = new LexerImpl(text, setUpOnError(), textStartPos) // ["]JSONValueGrammar": ...
+        const lexer = new LexerImpl({ start: textStartPos, textInitial: text }) // ["]JSONValueGrammar": ...
         // act
         lexer.scan() // "[JSONValueGrammar]"
         const startPos = lexer.getStartPos() // ["]JSONValueGrammar"
@@ -105,7 +104,7 @@ describe('lexerImpl - API', () => {
     it('should allow the user to `set` a new `start` position (`setTextPos`)', () => {
       // arrange
       expect.hasAssertions()
-      const lexer = new LexerImpl(text)
+      const lexer = new LexerImpl({ textInitial: text })
       const setTextPos = (): void => lexer.setTextPos(textStartPos)
       // assert
       expect(setTextPos).not.toThrow()
@@ -115,7 +114,7 @@ describe('lexerImpl - API', () => {
     it('should allow the user to `hook up` an custom error handler that will call in case of errors (`setOnError`)', () => {
       // arrange
       expect.hasAssertions()
-      const lexer = new LexerImpl(text)
+      const lexer = new LexerImpl()
       const onErrorListener = setUpOnError()
       const setOnError = (): void => lexer.setOnError(onErrorListener)
       // assert
@@ -125,7 +124,10 @@ describe('lexerImpl - API', () => {
     it('should allow the user to `read` the `token type` at the current position (`getToken`)', () => {
       // arrange
       expect.hasAssertions()
-      const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+      const lexer = new LexerImpl({
+        start: textStartPos,
+        textInitial: text,
+      })
       const { getToken } = lexer
       // act
       lexer.scan()
@@ -137,7 +139,7 @@ describe('lexerImpl - API', () => {
     it('should allow the user to `read` the `token value` at the current position (`getTokenValue`)', () => {
       // arrange
       expect.hasAssertions()
-      const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+      const lexer = new LexerImpl({ start: textStartPos, textInitial: text })
       const { getTokenValue } = lexer
       // act
       lexer.scan()
@@ -149,7 +151,7 @@ describe('lexerImpl - API', () => {
     it('should allow the user to `read` the `text representation` of the token at the current position (`getTokenText`)', () => {
       // arrange
       expect.hasAssertions()
-      const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+      const lexer = new LexerImpl({ start: textStartPos, textInitial: text })
       const { getTokenText } = lexer
       // act
       lexer.scan()
@@ -161,7 +163,10 @@ describe('lexerImpl - API', () => {
     it('should allow the user to `read` the `token flag` of the token at the current position (`getTokenFlags`)', () => {
       // arrange
       expect.hasAssertions()
-      const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+      const lexer = new LexerImpl({
+        start: textStartPos,
+        textInitial: text,
+      })
       const { getTokenFlags } = lexer
       // act
       lexer.scan()

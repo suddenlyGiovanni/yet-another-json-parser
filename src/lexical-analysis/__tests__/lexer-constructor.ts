@@ -28,7 +28,7 @@ describe('lexerImpl - instantiation', () => {
     // arrange
     expect.hasAssertions()
     // act
-    const createLexer = (): Lexer => new LexerImpl(text)
+    const createLexer = (): Lexer => new LexerImpl({ textInitial: text })
     // assert
     expect(createLexer).not.toThrow()
   })
@@ -38,7 +38,8 @@ describe('lexerImpl - instantiation', () => {
     expect.hasAssertions()
     const onError = setUpOnError()
     // act
-    const createLexer = (): Lexer => new LexerImpl(text, onError)
+    const createLexer = (): Lexer =>
+      new LexerImpl({ onError, textInitial: text })
     // assert
     expect(createLexer).not.toThrow()
   })
@@ -49,7 +50,11 @@ describe('lexerImpl - instantiation', () => {
 
     // act
     const createLexer = (): Lexer =>
-      new LexerImpl(text, setUpOnError(), textStartPos)
+      new LexerImpl({
+        onError: setUpOnError(),
+        start: textStartPos,
+        textInitial: text,
+      })
     // assert
     expect(createLexer).not.toThrow()
   })
@@ -60,7 +65,12 @@ describe('lexerImpl - instantiation', () => {
     const end = text.indexOf('}')
     // act
     const instantiateLexer = (): Lexer =>
-      new LexerImpl(text, setUpOnError(), textStartPos, end)
+      new LexerImpl({
+        length: end,
+        onError: setUpOnError(),
+        start: textStartPos,
+        textInitial: text,
+      })
     // assert
     expect(instantiateLexer).not.toThrow()
   })
@@ -69,7 +79,13 @@ describe('lexerImpl - instantiation', () => {
     // arrange
     expect.hasAssertions()
     const createLexer = (): Lexer =>
-      new LexerImpl(text, setUpOnError(), textStartPos, text.length, true)
+      new LexerImpl({
+        length: text.length,
+        onError: setUpOnError(),
+        skipTrivia: true,
+        start: textStartPos,
+        textInitial: text,
+      })
     // assert
     expect(createLexer).not.toThrow()
   })

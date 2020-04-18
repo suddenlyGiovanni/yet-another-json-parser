@@ -20,7 +20,11 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     expect.hasAssertions()
     const onError = setUpOnError()
     const textStartPos = text.search(/"this is a plain old 'string'"/)
-    const lexer = new LexerImpl(text, onError, textStartPos)
+    const lexer = new LexerImpl({
+      onError,
+      start: textStartPos,
+      textInitial: text,
+    })
 
     // act
     lexer.scan()
@@ -37,7 +41,11 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // arrange
     expect.hasAssertions()
     const textStartPos = text.search(/"escape quotation mark"/)
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
 
     // act
     lexer.scan() // key
@@ -53,7 +61,11 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // arrange
     expect.hasAssertions()
     const textStartPos = text.search(/"escape reverse solidus"/)
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
 
     // act
     lexer.scan() // key
@@ -69,7 +81,11 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // arrange
     expect.hasAssertions()
     const textStartPos = text.search(/"escape solidus"/)
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
 
     // act
     lexer.scan() // key
@@ -86,7 +102,11 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // arrange
     expect.hasAssertions()
     const textStartPos = text.search(/"escape backspace"/)
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
 
     // act
     lexer.scan() // key
@@ -102,7 +122,11 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // arrange
     expect.hasAssertions()
     const textStartPos = text.search(/"escape form feed"/)
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
 
     // act
     lexer.scan() // key
@@ -118,9 +142,13 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // arrange
     expect.hasAssertions()
     const textStartPos = text.search(/"escape line feed"/)
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
-
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
     // act
+
     lexer.scan() // key
     lexer.scan() // :
     lexer.scan()
@@ -134,7 +162,11 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // arrange
     expect.hasAssertions()
     const textStartPos = text.search(/"escape carriage return"/)
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
 
     // act
     lexer.scan() // key
@@ -150,7 +182,11 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // arrange
     expect.hasAssertions()
     const textStartPos = text.search(/"escape character tabulation"/)
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
 
     // act
     lexer.scan() // key
@@ -167,7 +203,11 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
     // arrange
     expect.hasAssertions()
     const textStartPos = text.search(/"escape hexadecimal digits"/)
-    const lexer = new LexerImpl(text, setUpOnError(), textStartPos)
+    const lexer = new LexerImpl({
+      onError: setUpOnError(),
+      start: textStartPos,
+      textInitial: text,
+    })
 
     // act
     lexer.scan() // key
@@ -183,7 +223,13 @@ describe('lexerImpl - scan - string:\n A string is a sequence of Unicode code po
   describe('should handle string with hexadecimal escapes control characters from (U+0000) to (U+001F)', () => {
     const start = text.search(/"hexadecimal escapes control characters"/) // ?
     const end = text.length
-    const lexer = new LexerImpl(text, setUpOnError(), start, end, false)
+    const lexer = new LexerImpl({
+      length: end,
+      onError: setUpOnError(),
+      skipTrivia: false,
+      start,
+      textInitial: text,
+    })
     it('(U+0000) = NULL', () => {
       // arrange
       expect.hasAssertions()

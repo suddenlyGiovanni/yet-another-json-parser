@@ -13,7 +13,7 @@ describe('lexerImpl - scan - literal name tokens', () => {
     onErrorMock.mockReset()
     return onErrorMock
   }
-  const lexer = new LexerImpl(text, setUpOnError())
+  const lexer = new LexerImpl({ onError: setUpOnError(), textInitial: text })
   it('should return `SyntaxKind.TrueKeyword` when encountering the `true` reserved keyword', () => {
     // arrange
     expect.hasAssertions()
@@ -55,7 +55,9 @@ describe('lexerImpl - scan - literal name tokens', () => {
   it('should not care about non legal json literal tokens', () => {
     // arrange
     expect.hasAssertions()
-    const scanner = new LexerImpl(`{"legalJsonKey":illegalJsonValue}`)
+    const scanner = new LexerImpl({
+      textInitial: `{"legalJsonKey":illegalJsonValue}`,
+    })
 
     // act
     scanner.scan() // SyntaxKind.LeftCurlyBracket
