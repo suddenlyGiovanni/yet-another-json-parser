@@ -5,7 +5,7 @@ describe('lexerImpl - scan - structural tokens', () => {
   it('should return `SyntaxKind.LeftSquareBracket` when encountering a left square bracket `[`', () => {
     // arrange
     expect.hasAssertions()
-    const lexer = new LexerImpl('[]')
+    const lexer = new LexerImpl({ textInitial: '[]' })
     // act
     lexer.scan()
     // assert
@@ -16,7 +16,7 @@ describe('lexerImpl - scan - structural tokens', () => {
   it('should return `SyntaxKind.RightSquareBracket` when encountering a right square bracket `]`', () => {
     // arrange
     expect.hasAssertions()
-    const lexer = new LexerImpl('[]')
+    const lexer = new LexerImpl({ textInitial: '[]' })
     // act
     lexer.scan()
     // assert
@@ -27,7 +27,7 @@ describe('lexerImpl - scan - structural tokens', () => {
   it('should return `SyntaxKind.LeftCurlyBracket` when encountering a left curly bracket `{`', () => {
     // arrange
     expect.hasAssertions()
-    const lexer = new LexerImpl('{}')
+    const lexer = new LexerImpl({ textInitial: '{}' })
     // act
     lexer.scan()
     // assert
@@ -38,7 +38,7 @@ describe('lexerImpl - scan - structural tokens', () => {
   it('should return `SyntaxKind.RightCurlyBracket` when encountering a right curly bracket `}`', () => {
     // arrange
     expect.hasAssertions()
-    const lexer = new LexerImpl('{}')
+    const lexer = new LexerImpl({ textInitial: '{}' })
     // act
     lexer.scan()
     // assert
@@ -49,7 +49,7 @@ describe('lexerImpl - scan - structural tokens', () => {
   it('should return `SyntaxKind.Colon` when encountering a colon `:`', () => {
     // arrange
     expect.hasAssertions()
-    const lexer = new LexerImpl(' : ')
+    const lexer = new LexerImpl({ textInitial: ' : ' })
     // act
     lexer.scan()
     // assert
@@ -59,8 +59,8 @@ describe('lexerImpl - scan - structural tokens', () => {
   it('should return `SyntaxKind.Comma` when encountering a comma `,`', () => {
     // arrange
     expect.hasAssertions()
-    const text = '"key": "a, b, c",'
-    const lexer = new LexerImpl(text)
+    const textInitial = '"key": "a, b, c",'
+    const lexer = new LexerImpl({ textInitial })
     // act
     lexer.scan() // key
     lexer.scan() // colum
@@ -69,6 +69,6 @@ describe('lexerImpl - scan - structural tokens', () => {
     // assert
     expect(lexer.getToken()).toBe(SyntaxKind.Comma)
     expect(lexer.getTokenText()).toBe(',')
-    expect(lexer.getTextPos()).toBe(text.length)
+    expect(lexer.getTextPos()).toBe(textInitial.length)
   })
 })
