@@ -140,9 +140,9 @@ export class LexerImpl implements Lexer {
     return this.tokenValue
   }
 
-  // public hasPrecedingLineBreak(): boolean {
-  //   return this.tokenFlags === TokenFlags.PrecedingLineBreak
-  // }
+  public hasPrecedingLineBreak(): boolean {
+    return this.tokenFlags === TokenFlags.PrecedingLineBreak
+  }
 
   public isIdentifier(): boolean {
     return (
@@ -159,6 +159,7 @@ export class LexerImpl implements Lexer {
     const saveToken = this.token
     const saveTokenValue = this.tokenValue
     const saveTokenFlags = this.tokenFlags
+    // eslint-disable-next-line callback-return
     const result = callback()
 
     // If our callback returned something 'falsy', then unconditionally restore us to where we were.

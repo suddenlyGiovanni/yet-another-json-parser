@@ -75,4 +75,4 @@ export const JSONtoStringify: JSONValue = {
   arrayLiteral: [null, true, false, 'string', 1e-100, {}, []],
 }
 
-export const text: JSONText = JSON.stringify(JSONtoStringify, null, 2)
+export const text: JSONText = JSON.stringify(JSONtoStringify, null, 2) // ?

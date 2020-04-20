@@ -206,5 +206,48 @@ describe('lexerImpl - API', () => {
         expect(lexer.isIdentifier()).toBe(true)
       })
     })
+
+    describe('hasPrecedingLineBreak', () => {
+      it('should be defined', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl({
+          start: textStartPos,
+          textInitial: text,
+        })
+        const { hasPrecedingLineBreak } = lexer
+        // act
+        // assert
+        expect(hasPrecedingLineBreak).toBeDefined()
+      })
+
+      it('should return `false` when no preceding line-brake has been encountered', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start: 0,
+          textInitial: text,
+        })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.hasPrecedingLineBreak()).toBe(false)
+      })
+
+      it('should return `true` when a preceding line-brake has been encountered', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start: 1,
+          textInitial: text,
+        })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.hasPrecedingLineBreak()).toBe(true)
+      })
+    })
   })
 })
