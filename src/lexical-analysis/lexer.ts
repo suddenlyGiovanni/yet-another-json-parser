@@ -152,6 +152,10 @@ export class LexerImpl implements Lexer {
     )
   }
 
+  public isUnterminated(): boolean {
+    return (this.tokenFlags & TokenFlags.Unterminated) !== 0
+  }
+
   public lookAhead<T>(callback: () => T): T {
     const savePos = this.pos
     const saveStartPos = this.startPos
