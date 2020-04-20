@@ -33,7 +33,7 @@ export interface Lexer {
    * @returns {SyntaxKind}
    * @memberof Lexer
    */
-   getToken(): SyntaxKind
+  getToken(): SyntaxKind
 
   getTokenFlags(): TokenFlags
 
@@ -62,6 +62,19 @@ export interface Lexer {
   getTokenValue(): string
 
   /**
+   * returns a boolean value indicating if the lexer at the current position
+   * is preceded by a line brake:
+   * * line feed
+   * * carriage return
+   * * line separator
+   * * paragraph separator
+   *
+   * @returns {boolean}
+   * @memberof Lexer
+   */
+  hasPrecedingLineBreak(): boolean
+
+  /**
    * checks if the current token is an Identifier
    *
    * @returns {boolean}
@@ -81,8 +94,6 @@ export interface Lexer {
   lookAhead<T>(callback: () => T): T
 
   // hasUnicodeEscape(): boolean
-
-  // hasPrecedingLineBreak(): boolean
 
   // isReservedWord(): boolean
 
