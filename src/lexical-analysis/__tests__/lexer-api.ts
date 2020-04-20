@@ -249,5 +249,44 @@ describe('lexerImpl - API', () => {
         expect(lexer.hasPrecedingLineBreak()).toBe(true)
       })
     })
+
+    describe('isUnterminated', () => {
+      it('should be defined', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl()
+        const { isUnterminated } = lexer
+        // assert
+        expect(isUnterminated).toBeDefined()
+      })
+
+      it('should return `false` if the text has been lexed correctly', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start: 0,
+          textInitial: text,
+        })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.isUnterminated()).toBe(false)
+      })
+      it('should return `true` if the text has not terminated not correctly', () => {
+        expect.hasAssertions()
+        const textInitial = '"Unterminated string literal \r"'
+        const start = textInitial.length - 3
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start,
+          textInitial,
+        })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.isUnterminated()).toBe(true)
+      })
+    })
   })
 })
