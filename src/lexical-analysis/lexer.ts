@@ -144,6 +144,27 @@ export class LexerImpl implements Lexer {
     return this.tokenFlags === TokenFlags.PrecedingLineBreak
   }
 
+  public lookAhead<T>(callback: () => T): T {
+    const savePos = this.pos
+    const saveStartPos = this.startPos
+    const saveTokenPos = this.tokenPos
+    const saveToken = this.token
+    const saveTokenValue = this.tokenValue
+    const saveTokenFlags = this.tokenFlags
+    const result = callback()
+
+    // If our callback returned something 'falsy', then unconditionally restore us to where we were.
+    if (!result) {
+      this.pos = savePos
+      this.startPos = saveStartPos
+      this.tokenPos = saveTokenPos
+      this.token = saveToken
+      this.tokenValue = saveTokenValue
+      this.tokenFlags = saveTokenFlags
+    }
+    return result
+  }
+
   // eslint-disable-next-line sonarjs/cognitive-complexity
   public scan(): SyntaxKind {
     this.startPos = this.pos

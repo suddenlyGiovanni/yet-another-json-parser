@@ -61,6 +61,17 @@ export interface Lexer {
    */
   getTokenValue(): string
 
+  /**
+   * Invokes the provided callback then unconditionally restores the lexer to the state it was in
+   * immediately prior to invoking the callback.
+   * The result of invoking the callback is returned from this function.
+   *
+   * @param {() => T} callback
+   * @returns {T}
+   * @memberof Lexer
+   */
+  lookAhead<T>(callback: () => T): T
+
   // hasUnicodeEscape(): boolean
 
   // hasPrecedingLineBreak(): boolean
