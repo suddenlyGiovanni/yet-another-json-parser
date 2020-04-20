@@ -174,5 +174,37 @@ describe('lexerImpl - API', () => {
       expect(getTokenFlags).toBeDefined()
       expect(lexer.getTokenFlags()).toBe(TokenFlags.None)
     })
+
+    describe('isIdentifier', () => {
+      it('should allow the user to query if the token is an Identifier, (`isIdentifier`)', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl()
+        const { isIdentifier } = lexer
+        // assert
+        expect(isIdentifier).toBeDefined()
+      })
+      it('should return `false` when the current token is not an Identifier', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl({ start: textStartPos, textInitial: text })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.getToken()).not.toBe(SyntaxKind.Identifier)
+        expect(lexer.isIdentifier()).toBe(false)
+      })
+      it('should return `true` when the current token is an Identifier', () => {
+        // arrange
+        expect.hasAssertions()
+        const start = text.search(/true/) // ?
+        const lexer = new LexerImpl({ start, textInitial: text })
+        // act
+        lexer.scan() // ?
+        // assert
+        expect(lexer.getToken()).toBe(SyntaxKind.TrueKeyword)
+        expect(lexer.isIdentifier()).toBe(true)
+      })
+    })
   })
 })
