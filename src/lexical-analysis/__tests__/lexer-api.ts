@@ -197,10 +197,10 @@ describe('lexerImpl - API', () => {
       it('should return `true` when the current token is an Identifier', () => {
         // arrange
         expect.hasAssertions()
-        const start = text.search(/true/) // ?
+        const start = text.search(/true/)
         const lexer = new LexerImpl({ start, textInitial: text })
         // act
-        lexer.scan() // ?
+        lexer.scan()
         // assert
         expect(lexer.getToken()).toBe(SyntaxKind.TrueKeyword)
         expect(lexer.isIdentifier()).toBe(true)
@@ -286,6 +286,48 @@ describe('lexerImpl - API', () => {
         lexer.scan()
         // assert
         expect(lexer.isUnterminated()).toBe(true)
+      })
+    })
+
+    describe('hasUnicodeEscape', () => {
+      it('should be defined', () => {
+        // arrange
+        expect.hasAssertions()
+        const { hasUnicodeEscape } = new LexerImpl()
+        // assert
+        expect(hasUnicodeEscape).toBeDefined()
+      })
+
+      it("should return `false` if the lexer hasn't encounter an unicode escape sequence", () => {
+        // arrange
+        expect.hasAssertions()
+        const start = text.search(/"this is a plain old 'string'"/)
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start,
+          textInitial: text,
+        })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.hasUnicodeEscape()).toBe(false)
+      })
+
+      it('should return `true` if the lexer has encounter an unicode escape sequence', () => {
+        // arrange
+        expect.hasAssertions()
+        const start = text.search(/"escape hexadecimal digits"/)
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start,
+          textInitial: text,
+        })
+        // act
+        lexer.scan() // key
+        lexer.scan() // :
+        lexer.scan() // string value
+        // assert
+        expect(lexer.hasUnicodeEscape()).toBe(true)
       })
     })
   })

@@ -74,6 +74,8 @@ export interface Lexer {
    */
   hasPrecedingLineBreak(): boolean
 
+  hasUnicodeEscape(): boolean
+
   /**
    * checks if the current token is an Identifier
    *
@@ -90,6 +92,7 @@ export interface Lexer {
    * @memberof Lexer
    */
   isUnterminated(): boolean
+
   /**
    * Invokes the provided callback then unconditionally restores the lexer to the state it was in
    * immediately prior to invoking the callback.
@@ -100,10 +103,6 @@ export interface Lexer {
    * @memberof Lexer
    */
   lookAhead<T>(callback: () => T): T
-
-  // hasUnicodeEscape(): boolean
-
-  // isReservedWord(): boolean
 
   /**
    * steps over the next Token,

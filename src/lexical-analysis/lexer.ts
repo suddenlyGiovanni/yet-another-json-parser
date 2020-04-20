@@ -144,6 +144,10 @@ export class LexerImpl implements Lexer {
     return this.tokenFlags === TokenFlags.PrecedingLineBreak
   }
 
+  public hasUnicodeEscape(): boolean {
+    return (this.tokenFlags & TokenFlags.UnicodeEscape) !== 0
+  }
+
   public isIdentifier(): boolean {
     return (
       this.token === SyntaxKind.Identifier ||
