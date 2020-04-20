@@ -83,6 +83,14 @@ export interface Lexer {
   isIdentifier(): boolean
 
   /**
+   * returns a boolean value indicating if the token is not terminated correctly to according to
+   * the JSON syntax
+   *
+   * @returns {boolean}
+   * @memberof Lexer
+   */
+  isUnterminated(): boolean
+  /**
    * Invokes the provided callback then unconditionally restores the lexer to the state it was in
    * immediately prior to invoking the callback.
    * The result of invoking the callback is returned from this function.
@@ -96,8 +104,6 @@ export interface Lexer {
   // hasUnicodeEscape(): boolean
 
   // isReservedWord(): boolean
-
-  // isUnterminated(): boolean
 
   /**
    * steps over the next Token,
