@@ -140,8 +140,16 @@ export class LexerImpl implements Lexer {
     return this.tokenValue
   }
 
-  public hasPrecedingLineBreak(): boolean {
-    return this.tokenFlags === TokenFlags.PrecedingLineBreak
+  // public hasPrecedingLineBreak(): boolean {
+  //   return this.tokenFlags === TokenFlags.PrecedingLineBreak
+  // }
+
+  public isIdentifier(): boolean {
+    return (
+      this.token === SyntaxKind.Identifier ||
+      (this.token >= SyntaxKind.FirstKeyword &&
+        this.token <= SyntaxKind.LastKeyword)
+    )
   }
 
   public lookAhead<T>(callback: () => T): T {
