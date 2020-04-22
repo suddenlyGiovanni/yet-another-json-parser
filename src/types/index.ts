@@ -14,3 +14,4 @@ export {
   KeywordSyntaxKind,
 } from 'types/syntax-kind'
 export { Lexer } from 'types/lexer'
+export { Declaration, Node, SourceFile, TextRange } from 'types/ast'

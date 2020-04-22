@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 /* eslint-disable no-magic-numbers */
 
 // eslint-disable-next-line jest/no-mocks-import
