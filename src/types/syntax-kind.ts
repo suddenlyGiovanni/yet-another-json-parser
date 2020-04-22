@@ -136,6 +136,9 @@ export const enum SyntaxKind {
   FalseKeyword,
   NullKeyword,
 
+  // Top-level nodes
+  SourceFile,
+
   // Markers
   FirstKeyword = TrueKeyword,
   LastKeyword = NullKeyword,
