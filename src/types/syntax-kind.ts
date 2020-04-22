@@ -135,6 +135,10 @@ export const enum SyntaxKind {
   TrueKeyword,
   FalseKeyword,
   NullKeyword,
+
+  // Markers
+  FirstKeyword = TrueKeyword,
+  LastKeyword = NullKeyword,
 }
 
 export type KeywordSyntaxKind =

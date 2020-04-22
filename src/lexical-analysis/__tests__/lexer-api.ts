@@ -174,5 +174,161 @@ describe('lexerImpl - API', () => {
       expect(getTokenFlags).toBeDefined()
       expect(lexer.getTokenFlags()).toBe(TokenFlags.None)
     })
+
+    describe('isIdentifier', () => {
+      it('should allow the user to query if the token is an Identifier, (`isIdentifier`)', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl()
+        const { isIdentifier } = lexer
+        // assert
+        expect(isIdentifier).toBeDefined()
+      })
+      it('should return `false` when the current token is not an Identifier', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl({ start: textStartPos, textInitial: text })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.getToken()).not.toBe(SyntaxKind.Identifier)
+        expect(lexer.isIdentifier()).toBe(false)
+      })
+      it('should return `true` when the current token is an Identifier', () => {
+        // arrange
+        expect.hasAssertions()
+        const start = text.search(/true/)
+        const lexer = new LexerImpl({ start, textInitial: text })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.getToken()).toBe(SyntaxKind.TrueKeyword)
+        expect(lexer.isIdentifier()).toBe(true)
+      })
+    })
+
+    describe('hasPrecedingLineBreak', () => {
+      it('should be defined', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl({
+          start: textStartPos,
+          textInitial: text,
+        })
+        const { hasPrecedingLineBreak } = lexer
+        // act
+        // assert
+        expect(hasPrecedingLineBreak).toBeDefined()
+      })
+
+      it('should return `false` when no preceding line-brake has been encountered', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start: 0,
+          textInitial: text,
+        })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.hasPrecedingLineBreak()).toBe(false)
+      })
+
+      it('should return `true` when a preceding line-brake has been encountered', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start: 1,
+          textInitial: text,
+        })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.hasPrecedingLineBreak()).toBe(true)
+      })
+    })
+
+    describe('isUnterminated', () => {
+      it('should be defined', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl()
+        const { isUnterminated } = lexer
+        // assert
+        expect(isUnterminated).toBeDefined()
+      })
+
+      it('should return `false` if the text has been lexed correctly', () => {
+        // arrange
+        expect.hasAssertions()
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start: 0,
+          textInitial: text,
+        })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.isUnterminated()).toBe(false)
+      })
+      it('should return `true` if the text has not terminated not correctly', () => {
+        expect.hasAssertions()
+        const textInitial = '"Unterminated string literal \r"'
+        const start = textInitial.length - 3
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start,
+          textInitial,
+        })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.isUnterminated()).toBe(true)
+      })
+    })
+
+    describe('hasUnicodeEscape', () => {
+      it('should be defined', () => {
+        // arrange
+        expect.hasAssertions()
+        const { hasUnicodeEscape } = new LexerImpl()
+        // assert
+        expect(hasUnicodeEscape).toBeDefined()
+      })
+
+      it("should return `false` if the lexer hasn't encounter an unicode escape sequence", () => {
+        // arrange
+        expect.hasAssertions()
+        const start = text.search(/"this is a plain old 'string'"/)
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start,
+          textInitial: text,
+        })
+        // act
+        lexer.scan()
+        // assert
+        expect(lexer.hasUnicodeEscape()).toBe(false)
+      })
+
+      it('should return `true` if the lexer has encounter an unicode escape sequence', () => {
+        // arrange
+        expect.hasAssertions()
+        const start = text.search(/"escape hexadecimal digits"/)
+        const lexer = new LexerImpl({
+          skipTrivia: true,
+          start,
+          textInitial: text,
+        })
+        // act
+        lexer.scan() // key
+        lexer.scan() // :
+        lexer.scan() // string value
+        // assert
+        expect(lexer.hasUnicodeEscape()).toBe(true)
+      })
+    })
   })
 })

@@ -144,6 +144,22 @@ export class LexerImpl implements Lexer {
     return this.tokenFlags === TokenFlags.PrecedingLineBreak
   }
 
+  public hasUnicodeEscape(): boolean {
+    return (this.tokenFlags & TokenFlags.UnicodeEscape) !== 0
+  }
+
+  public isIdentifier(): boolean {
+    return (
+      this.token === SyntaxKind.Identifier ||
+      (this.token >= SyntaxKind.FirstKeyword &&
+        this.token <= SyntaxKind.LastKeyword)
+    )
+  }
+
+  public isUnterminated(): boolean {
+    return (this.tokenFlags & TokenFlags.Unterminated) !== 0
+  }
+
   public lookAhead<T>(callback: () => T): T {
     const savePos = this.pos
     const saveStartPos = this.startPos
@@ -151,6 +167,7 @@ export class LexerImpl implements Lexer {
     const saveToken = this.token
     const saveTokenValue = this.tokenValue
     const saveTokenFlags = this.tokenFlags
+    // eslint-disable-next-line callback-return
     const result = callback()
 
     // If our callback returned something 'falsy', then unconditionally restore us to where we were.
