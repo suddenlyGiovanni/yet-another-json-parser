@@ -23,7 +23,7 @@
     "commitizen": "4.0.4",
     "commitlint": "8.3.5",
     "cz-conventional-changelog": "3.1.0",
-    "dtslint": "3.4.1",
+    "dtslint": "3.4.2",
     "eslint": "6.8.0",
     "eslint-config-airbnb-typescript": "7.2.1",
     "eslint-config-prettier": "6.11.0",
