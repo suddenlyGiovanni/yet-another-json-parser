@@ -242,32 +242,32 @@ export class LexerImpl implements Lexer {
         //  structural tokens:
         case CharacterCodes.openBracket:
           this.pos += 1
-          this.token = SyntaxKind.LeftSquareBracket
+          this.token = SyntaxKind.LeftSquareBracketToken
           return this.token
 
         case CharacterCodes.closeBracket:
           this.pos += 1
-          this.token = SyntaxKind.RightSquareBracket
+          this.token = SyntaxKind.RightSquareBracketToken
           return this.token
 
         case CharacterCodes.openBrace:
           this.pos += 1
-          this.token = SyntaxKind.LeftCurlyBracket
+          this.token = SyntaxKind.LeftCurlyBracketToken
           return this.token
 
         case CharacterCodes.closeBrace:
           this.pos += 1
-          this.token = SyntaxKind.RightCurlyBracket
+          this.token = SyntaxKind.RightCurlyBracketToken
           return this.token
 
         case CharacterCodes.colon:
           this.pos += 1
-          this.token = SyntaxKind.Colon
+          this.token = SyntaxKind.ColonToken
           return this.token
 
         case CharacterCodes.comma:
           this.pos += 1
-          this.token = SyntaxKind.Comma
+          this.token = SyntaxKind.CommaToken
           return this.token
 
         case CharacterCodes.doubleQuote:

@@ -9,8 +9,8 @@ describe('lexerImpl - scan - structural tokens', () => {
     // act
     lexer.scan()
     // assert
-    expect(lexer.getToken()).toBe(SyntaxKind.LeftSquareBracket)
-    expect(lexer.scan()).not.toBe(SyntaxKind.LeftSquareBracket)
+    expect(lexer.getToken()).toBe(SyntaxKind.LeftSquareBracketToken)
+    expect(lexer.scan()).not.toBe(SyntaxKind.LeftSquareBracketToken)
   })
 
   it('should return `SyntaxKind.RightSquareBracket` when encountering a right square bracket `]`', () => {
@@ -20,8 +20,8 @@ describe('lexerImpl - scan - structural tokens', () => {
     // act
     lexer.scan()
     // assert
-    expect(lexer.getToken()).not.toBe(SyntaxKind.RightSquareBracket)
-    expect(lexer.scan()).toBe(SyntaxKind.RightSquareBracket)
+    expect(lexer.getToken()).not.toBe(SyntaxKind.RightSquareBracketToken)
+    expect(lexer.scan()).toBe(SyntaxKind.RightSquareBracketToken)
   })
 
   it('should return `SyntaxKind.LeftCurlyBracket` when encountering a left curly bracket `{`', () => {
@@ -31,8 +31,8 @@ describe('lexerImpl - scan - structural tokens', () => {
     // act
     lexer.scan()
     // assert
-    expect(lexer.getToken()).toBe(SyntaxKind.LeftCurlyBracket)
-    expect(lexer.scan()).not.toBe(SyntaxKind.LeftCurlyBracket)
+    expect(lexer.getToken()).toBe(SyntaxKind.LeftCurlyBracketToken)
+    expect(lexer.scan()).not.toBe(SyntaxKind.LeftCurlyBracketToken)
   })
 
   it('should return `SyntaxKind.RightCurlyBracket` when encountering a right curly bracket `}`', () => {
@@ -42,8 +42,8 @@ describe('lexerImpl - scan - structural tokens', () => {
     // act
     lexer.scan()
     // assert
-    expect(lexer.getToken()).not.toBe(SyntaxKind.RightCurlyBracket)
-    expect(lexer.scan()).toBe(SyntaxKind.RightCurlyBracket)
+    expect(lexer.getToken()).not.toBe(SyntaxKind.RightCurlyBracketToken)
+    expect(lexer.scan()).toBe(SyntaxKind.RightCurlyBracketToken)
   })
 
   it('should return `SyntaxKind.Colon` when encountering a colon `:`', () => {
@@ -53,7 +53,7 @@ describe('lexerImpl - scan - structural tokens', () => {
     // act
     lexer.scan()
     // assert
-    expect(lexer.getToken()).toBe(SyntaxKind.Colon)
+    expect(lexer.getToken()).toBe(SyntaxKind.ColonToken)
   })
 
   it('should return `SyntaxKind.Comma` when encountering a comma `,`', () => {
@@ -67,7 +67,7 @@ describe('lexerImpl - scan - structural tokens', () => {
     lexer.scan() // StringLiteral
     lexer.scan()
     // assert
-    expect(lexer.getToken()).toBe(SyntaxKind.Comma)
+    expect(lexer.getToken()).toBe(SyntaxKind.CommaToken)
     expect(lexer.getTokenText()).toBe(',')
     expect(lexer.getTextPos()).toBe(textInitial.length)
   })
