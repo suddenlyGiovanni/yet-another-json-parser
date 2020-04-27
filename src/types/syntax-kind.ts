@@ -1,5 +1,62 @@
 import { MapLike } from 'types'
 
+export type JSONStructuralTokens =
+  | SyntaxKind.LeftSquareBracketToken
+  | SyntaxKind.LeftCurlyBracketToken
+  | SyntaxKind.RightSquareBracketToken
+  | SyntaxKind.RightCurlyBracketToken
+  | SyntaxKind.ColonToken
+  | SyntaxKind.CommaToken
+
+export type JSONLiteralNameTokens =
+  | SyntaxKind.TrueKeyword
+  | SyntaxKind.FalseKeyword
+  | SyntaxKind.NullKeyword
+
+export type WhiteSpaceTokens =
+  | SyntaxKind.CharacterTabulationToken
+  | SyntaxKind.LineFeedToken
+  | SyntaxKind.CarriageReturnToken
+  | SyntaxKind.SpaceToken
+
+/**
+ * * literal
+ * * Pseudo-literals
+ * * Punctuation
+ * * Assignments
+ * * Identifiers and PrivateIdentifiers
+ * * Reserved words
+ * * Strict mode reserved words
+ * * Contextual keywords
+ *
+ * // Parse tree nodes
+ * * Names
+ * * Signature elements
+ * * TypeMember
+ * * Type
+ * * Binding patterns
+ * * Expression
+ * * Misc
+ * * Element
+ * * Module references
+ * * JSX
+ * * Clauses
+ * * Property assignments
+ * * Enum
+ * * Unparsed
+ * * Top-level nodes
+ * * JSDoc nodes
+ * * The * type
+ * * The ? type
+ * * Synthesized list
+ * * Transformation nodes
+ * * Enum value count
+ * * Markers
+ *
+ *
+ * @export
+ * @enum {number}
+ */
 export const enum SyntaxKind {
   /** Bottom type representing an unknown token */
   Unknown,
@@ -11,110 +68,83 @@ export const enum SyntaxKind {
   NewLineTrivia,
   WhitespaceTrivia,
 
-  /*
-    JSON Structural Tokens
-    LeftSquareBracket | LeftCurlyBracket | RightSquareBracket | RightCurlyBracket | Colon | Comma
-  */
+  // Literals
+
+  NumericLiteral,
+
+  StringLiteral,
+
+  // Punctuation
 
   /**
    * token: `[`
    * description: left square bracket
    * unicode code point: `U+005B`
    */
-  LeftSquareBracket,
+  LeftSquareBracketToken,
 
   /**
    * token: `{`
    * description: left curly bracket
    * unicode code point: `U+007B`
    */
-  LeftCurlyBracket,
+  LeftCurlyBracketToken,
 
   /**
    * token: `]`
    * description: right square bracket
    * unicode code point: `U+005D`
    */
-  RightSquareBracket,
+  RightSquareBracketToken,
 
   /**
    * token: `}`
    * description: right curly bracket
    * unicode code point: `U+007D`
    */
-  RightCurlyBracket,
+  RightCurlyBracketToken,
 
   /**
    * token: `:`
    * description: colon
    * unicode code point: `U+003A`
    */
-  Colon,
+  ColonToken,
 
   /**
    * token: `,`
    * description: comma
    * unicode code point: `U+002C`
    */
-  Comma,
-
-  /*
-    JSON Literal NameTokens:
-    True | False | Null
-  */
-
-  /**
-   * token: `true`
-   * description: boolean type `true`
-   * unicode code point: `U+0074` + `U+0072` + `U+0075` + `U+0065`
-   */
-  True,
-
-  /**
-   * token: `false`
-   * description: boolean type `false`
-   * unicode code point: `U+0066` + `U+0061` + `U+006C` + `U+0073` + `U+0065`
-   */
-  False,
-
-  /**
-   * token: `null`
-   * unicode code point: `U+006E` + `U+0075` + `U+006C` + `U+006C`
-   */
-  Null,
-
-  /*
-    WhiteSpaceTokens
-    CharacterTabulation | LineFeed | CarriageReturn | Space
-  */
+  CommaToken,
 
   /**
    * token: `\t`
    * description: character tabulation
    * unicode code point: `U+0009`
    */
-  CharacterTabulation,
+  CharacterTabulationToken,
 
   /**
    * token: `\n`
    * description: line feed
    * unicode code point: `U+000A`
    */
-  LineFeed,
+  LineFeedToken,
 
   /**
    * token: `\r`
    * description: carriage return
    * unicode code point: `U+000D`
    */
-  CarriageReturn,
+  CarriageReturnToken,
 
   /**
    * token: `\s`
    * description: space
    * unicode code point: `U+0020`
    */
-  Space,
+  SpaceToken,
 
   /**
    * token: `-`
@@ -123,25 +153,110 @@ export const enum SyntaxKind {
    */
   MinusToken,
 
-  // Literals
+  // Assignments
 
-  NumericLiteral,
-
-  StringLiteral,
+  // Identifiers and PrivateIdentifiers
 
   Identifier,
 
   // Reserved words
+
+  /**
+   * token: `true`
+   * description: boolean type `true`
+   * unicode code point: `U+0074` + `U+0072` + `U+0075` + `U+0065`
+   */
   TrueKeyword,
+
+  /**
+   * token: `false`
+   * description: boolean type `false`
+   * unicode code point: `U+0066` + `U+0061` + `U+006C` + `U+0073` + `U+0065`
+   */
   FalseKeyword,
-  NullKeyword,
+
+  /**
+   * token: `null`
+   * unicode code point: `U+006E` + `U+0075` + `U+006C` + `U+006C`
+   */
+  NullKeyword, // <- LastKeyword and LastToken and LastContextualKeyword
+
+  // Strict mode reserved words
+
+  // Contextual keywords
+
+  // <- Parse tree nodes
+
+  // Names
+
+  // Signature elements
+
+  // TypeMember
+
+  // Type
+
+  // Binding patterns
+
+  // Expression
+  ArrayLiteralExpression,
+  PrefixUnaryExpression,
+
+  // Misc
+
+  // Element
+  ExpressionStatement,
+
+  // Module references
+
+  // JSX
+
+  // Clauses
+
+  // Property assignments
+
+  // Enum
+
+  // Unparsed
 
   // Top-level nodes
+
   SourceFile,
 
+  // JSDoc nodes
+
+  // The * type
+
+  // The ? type
+
+  // Synthesized list
+
+  // Transformation nodes
+
+  // Enum value count
+
   // Markers
+
   FirstKeyword = TrueKeyword,
+
   LastKeyword = NullKeyword,
+
+  FirstPunctuation = LeftSquareBracketToken,
+
+  LastPunctuation = MinusToken,
+
+  FirstToken = Unknown,
+
+  LastToken = NullKeyword,
+
+  FirstTriviaToken = SingleLineCommentTrivia,
+
+  LastTriviaToken = WhitespaceTrivia,
+
+  FirstLiteralToken = NumericLiteral,
+
+  LastLiteralToken = StringLiteral,
+
+  FirstNode = ArrayLiteralExpression,
 }
 
 export type KeywordSyntaxKind =
@@ -155,12 +270,12 @@ export const textToKeywordObject: MapLike<KeywordSyntaxKind> = {
   true: SyntaxKind.TrueKeyword,
 }
 export type JSONValueGrammar =
-  | SyntaxKind.LeftSquareBracket
-  | SyntaxKind.LeftCurlyBracket
-  | SyntaxKind.RightSquareBracket
-  | SyntaxKind.RightCurlyBracket
-  | SyntaxKind.Colon
-  | SyntaxKind.Comma
-  | SyntaxKind.True
-  | SyntaxKind.False
-  | SyntaxKind.Null
+  | SyntaxKind.LeftSquareBracketToken
+  | SyntaxKind.LeftCurlyBracketToken
+  | SyntaxKind.RightSquareBracketToken
+  | SyntaxKind.RightCurlyBracketToken
+  | SyntaxKind.ColonToken
+  | SyntaxKind.CommaToken
+  | SyntaxKind.TrueKeyword
+  | SyntaxKind.FalseKeyword
+  | SyntaxKind.NullKeyword

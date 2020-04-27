@@ -66,7 +66,7 @@ describe('lexerImpl - API - lookahead', () => {
     const saveTokenFlags = lexer.getTokenFlags()
     const falsyCallback = jest.fn(() => {
       lexer.scan()
-      return lexer.getToken() !== SyntaxKind.Colon
+      return lexer.getToken() !== SyntaxKind.ColonToken
     })
     const lookAhead = (): boolean => lexer.lookAhead(falsyCallback)
     // act
