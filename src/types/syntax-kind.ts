@@ -264,11 +264,6 @@ export type KeywordSyntaxKind =
   | SyntaxKind.FalseKeyword
   | SyntaxKind.NullKeyword
 
-export const textToKeywordObject: MapLike<KeywordSyntaxKind> = {
-  false: SyntaxKind.FalseKeyword,
-  null: SyntaxKind.NullKeyword,
-  true: SyntaxKind.TrueKeyword,
-}
 export type JSONValueGrammar =
   | SyntaxKind.LeftSquareBracketToken
   | SyntaxKind.LeftCurlyBracketToken

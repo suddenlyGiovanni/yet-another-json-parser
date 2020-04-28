@@ -24,8 +24,7 @@ import {
 } from 'types/index'
 
 import type { ErrorCallback } from 'types/lexer'
-import { textToKeywordObject } from 'types/syntax-kind'
-import { createMapFromTemplate } from 'utils/create-map'
+import { textToKeyword } from 'utils/maps'
 
 /**
  * DONE:(whitespace, curly brackets, square brackets, colum, comma, string, null, true, false)
@@ -70,7 +69,7 @@ export class LexerImpl implements Lexer {
   /** the raw string provided to the Lexer */
   private text!: string
 
-  private readonly textToKeyword = createMapFromTemplate(textToKeywordObject)
+  private readonly textToKeyword = textToKeyword
 
   private token!: SyntaxKind
 
