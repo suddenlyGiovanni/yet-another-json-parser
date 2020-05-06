@@ -22,7 +22,7 @@
     "@typescript-eslint/parser": "2.30.0",
     "commitizen": "4.0.5",
     "commitlint": "8.3.5",
-    "cz-conventional-changelog": "3.1.0",
+    "cz-conventional-changelog": "3.2.0",
     "dtslint": "3.5.1",
     "eslint": "6.8.0",
     "eslint-config-airbnb-typescript": "7.2.1",
