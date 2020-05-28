@@ -411,17 +411,31 @@
     "@types/parsimmon" "^1.10.1"
     parsimmon "^1.13.0"
 
-"@definitelytyped/typescript-versions@0.0.34", "@definitelytyped/typescript-versions@^0.0.34":
+"@definitelytyped/header-parser@latest":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@definitelytyped/header-parser/-/header-parser-0.0.35.tgz#3184ec205c4f5254c33cc34ca720dc9dbdc0176d"
+  integrity sha512-tlfQzjptRPS7ukWzOyUB/srJ3HuQf6OIkK4OOu5kVX6pS+oQRKqCBDS7afwKsGOCP198jT6gwDuuGJeojmFCBg==
+  dependencies:
+    "@definitelytyped/typescript-versions" "^0.0.35"
+    "@types/parsimmon" "^1.10.1"
+    parsimmon "^1.13.0"
+
+"@definitelytyped/typescript-versions@^0.0.34":
   version "0.0.34"
   resolved "https://registry.yarnpkg.com/@definitelytyped/typescript-versions/-/typescript-versions-0.0.34.tgz#6167363d378670ad7ef9485b7cff7d198106dcdf"
   integrity sha512-7IqWcbHKYbfY8Lt7AigXDa29cbz3gynzBHMjwMUCeLnex8D682M6OW8uBLouvVHCr+YENL58tQB3dn0Zos8mFQ==
 
-"@definitelytyped/utils@0.0.34":
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/@definitelytyped/utils/-/utils-0.0.34.tgz#7d34d4b411b68c95c1b3460071cee3efa4fc5b8b"
-  integrity sha512-C1mlA9ixRfv7PPmO99hJZ8Ii2roKY+7GoIwBPh5uYSF6WfABoVlzyWX3LsF6fy1MwpZbempC+r81iDm2QeYTsw==
+"@definitelytyped/typescript-versions@^0.0.35", "@definitelytyped/typescript-versions@latest":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@definitelytyped/typescript-versions/-/typescript-versions-0.0.35.tgz#f58d22d3f1141f5832e17f5b033ec80559eb8e51"
+  integrity sha512-avSJ8C5KPAYjAF2BkJbrIP3WaTKWM10LT+PepKFr0WXAjObUp8Ds7k8yweEpsRdUTjcL1YIzsusk9NOvAIVY2w==
+
+"@definitelytyped/utils@latest":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@definitelytyped/utils/-/utils-0.0.35.tgz#edd672d463cbfb6351d06f2e02e27be1fd8e549b"
+  integrity sha512-dw5sLbmyiPG0vFmrSe7cNpPWd1XgKWVT4FzRvZuf7L3heAzx+tshGs8vU5t8tAuQNFCvbtvacXRhN0OywqogTg==
   dependencies:
-    "@definitelytyped/typescript-versions" "^0.0.34"
+    "@definitelytyped/typescript-versions" "^0.0.35"
     "@types/node" "^12.12.29"
     charm "^1.0.2"
     fs-extra "^8.1.0"
@@ -1946,27 +1960,28 @@ dot-prop@^3.0.0:
   dependencies:
     is-obj "^1.0.0"
 
-dts-critic@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/dts-critic/-/dts-critic-3.2.1.tgz#611f5f724772661b86d2951ca58380baddae79b0"
-  integrity sha512-jNCWcrOduMsEUDXTZd+qWN7Nig52OgPVPL2IRJ7QQTx0MdYASEwqkoBdPrcEY/ClkKZ+rSjZi/xjBiNmRObuRg==
+dts-critic@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/dts-critic/-/dts-critic-3.2.3.tgz#892c9a02fd620a1d30449b26b314cd4820d9ba9c"
+  integrity sha512-CErYGgQiloLH0PZ/vrLH5+WgpPbHiOj77qFF+6pGuGtlQzb43oFUSS9Qetr4y9fAg2ZOG9ZvGp7h+jhh0kkbAg==
   dependencies:
     "@definitelytyped/header-parser" "0.0.34"
     command-exists "^1.2.8"
     rimraf "^3.0.2"
     semver "^6.2.0"
-    typescript "^3.7.5"
+    tmp "^0.2.1"
+    typescript "^3.9.2"
     yargs "^12.0.5"
 
-dtslint@3.6.2:
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/dtslint/-/dtslint-3.6.2.tgz#c131de5f87f8edc2ef3eeb86820f4f3d2c1bb567"
-  integrity sha512-U+1EcZpnzBsPqIqTVNEk12/K5oHnbUppvws4rLYoy9rmUjSkDVJqaMqEWJXTXPuqWy1Rp/Ky2rI53XRcMFJaeQ==
+dtslint@3.6.7:
+  version "3.6.7"
+  resolved "https://registry.yarnpkg.com/dtslint/-/dtslint-3.6.7.tgz#122701a32193913d7715a1b20b65f8dabcdd1040"
+  integrity sha512-0Ap/EjQ8s17SzsjL9mf07pYuGO5yL1wWPKr5TbrRdguNHdbDxd8gVyuF3L3lVanXIg6bwEXmU+umUjSY7nFx4w==
   dependencies:
-    "@definitelytyped/header-parser" "0.0.34"
-    "@definitelytyped/typescript-versions" "0.0.34"
-    "@definitelytyped/utils" "0.0.34"
-    dts-critic "^3.2.1"
+    "@definitelytyped/header-parser" latest
+    "@definitelytyped/typescript-versions" latest
+    "@definitelytyped/utils" latest
+    dts-critic "^3.2.3"
     fs-extra "^6.0.1"
     json-stable-stringify "^1.0.1"
     strip-json-comments "^2.0.1"
@@ -5921,6 +5936,13 @@ tmp@^0.0.33:
   dependencies:
     os-tmpdir "~1.0.2"
 
+tmp@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.2.1.tgz#8457fc3037dcf4719c251367a1af6500ee1ccf14"
+  integrity sha512-76SUhtfqR2Ijn+xllcI5P1oyannHNHByD80W1q447gU3mp9G9PSpGdWmjUOHRDPiHYacIk66W7ubDTuPF3BEtQ==
+  dependencies:
+    rimraf "^3.0.0"
+
 tmpl@1.0.x:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/tmpl/-/tmpl-1.0.4.tgz#23640dd7b42d00433911140820e5cf440e521dd1"
@@ -6156,7 +6178,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@3.9.3, typescript@^3.7.5:
+typescript@3.9.3, typescript@^3.9.2:
   version "3.9.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.3.tgz#d3ac8883a97c26139e42df5e93eeece33d610b8a"
   integrity sha512-D/wqnB2xzNFIcoBG9FG8cXRDjiqSTbG2wd8DMZeQyJlP1vfTkIxH4GKveWaEBYySKIg+USu+E+EDIR47SqnaMQ==
