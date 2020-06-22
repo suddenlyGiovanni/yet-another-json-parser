@@ -16,7 +16,7 @@
   "homepage": "https://github.com/suddenlyGiovanni/yet-another-json-parser",
   "devDependencies": {
     "@commitlint/cli": "8.3.5",
-    "@commitlint/config-conventional": "8.3.4",
+    "@commitlint/config-conventional": "9.0.1",
     "@types/jest": "25.2.3",
     "@typescript-eslint/eslint-plugin": "2.34.0",
     "@typescript-eslint/parser": "2.34.0",
