@@ -19,7 +19,9 @@
  * * interface SourceFile
  */
 
-import { SyntaxKind } from 'types'
+import { PrefixUnaryOperator, UnaryExpression } from 'typescript'
+
+import { NodeFlags, SyntaxKind, TokenFlags } from 'types'
 
 /**
  * Identify the node's start and end in the source file
@@ -34,7 +36,7 @@ export interface TextRange {
 export interface Node extends TextRange {
   kind: SyntaxKind
 
-  // flags: NodeFlags
+  flags: NodeFlags
 
   /**
    * @type {ModifierFlags}
@@ -166,10 +168,32 @@ export interface Node extends TextRange {
    */
   // inferenceContext?: InferenceContext
 }
+export interface NodeArray<T extends Node> extends ReadonlyArray<T>, TextRange {
+  hasTrailingComma?: boolean
+}
 
+export type MutableNodeArray<T extends Node> = NodeArray<T> & T[]
 export interface Declaration extends Node {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _declarationBrand: any
+}
+
+export interface Statement extends Node {
+  _statementBrand: any
+}
+
+export interface Expression extends Node {
+  _expressionBrand: any
+}
+
+export interface ExpressionStatement extends Statement {
+  kind: SyntaxKind.ExpressionStatement
+  expression: Expression
+}
+
+export interface Identifier extends Expression, Declaration {
+  kind: SyntaxKind.Identifier
+  escapedText: string
 }
 
 export interface SourceFile extends Declaration {
@@ -183,19 +207,19 @@ export interface SourceFile extends Declaration {
    * @type {NodeArray<Statement>}
    * @memberof SourceFile
    */
-  // statements: NodeArray<Statement>
+  statements: NodeArray<Statement>
 
   /**
    * @type {Token<SyntaxKind.EndOfFileToken>}
    * @memberof SourceFile
    */
-  // endOfFileToken: Token<SyntaxKind.EndOfFileToken>
+  endOfFileToken: Token<SyntaxKind.EndOfFileToken>
 
   /**
    * @type {string}
    * @memberof SourceFile
    */
-  // fileName: string
+  fileName: string
 
   /**
    * @type {Path}
@@ -239,4 +263,108 @@ export interface SourceFile extends Declaration {
    * @internal
    */
   symbolCount: number
+}
+
+export interface Token<TKind extends SyntaxKind> extends Node {
+  kind: TKind
+}
+
+export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken>
+
+export interface BooleanLiteral extends Expression {
+  kind: SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword
+}
+
+export interface NullLiteral extends Expression {
+  kind: SyntaxKind.NullKeyword
+}
+
+export interface JsonObjectExpressionStatement extends ExpressionStatement {
+  expression:
+    | ArrayLiteralExpression
+    | BooleanLiteral
+    | NullLiteral
+    | JsonMinusNumericLiteral
+    | NumericLiteral
+    | StringLiteral
+  // | ObjectLiteralExpression
+}
+
+export interface ArrayLiteralExpression extends Expression {
+  kind: SyntaxKind.ArrayLiteralExpression
+  elements: NodeArray<Expression>
+  /* @internal */
+  multiLine?: boolean
+}
+
+export interface JsonMinusNumericLiteral extends Expression {
+  kind: SyntaxKind.PrefixUnaryExpression
+  operator: SyntaxKind.MinusToken
+  // operand: NumericLiteral
+}
+
+/**
+ * The text property of a LiteralExpression stores the interpreted value of the literal in text form.
+ * For a StringLiteral, or any literal of a template, this means quotes have been removed and
+ * escapes have been converted to actual characters.
+ * For a NumericLiteral, the stored value is the toString() representation of the number.
+ * For example 1, 1.00, and 1e0 are all stored as just "1".
+ *
+ * @export
+ * @interface LiteralLikeNode
+ * @augments {Node}
+ */
+export interface LiteralLikeNode extends Node {
+  text: string
+  isUnterminated?: boolean
+  hasExtendedUnicodeEscape?: boolean
+}
+
+/**
+ * The text property of a LiteralExpression stores the interpreted value of the literal in text form.
+ * For a StringLiteral, or any literal of a template, this means quotes have been removed and escapes
+ * have been converted to actual characters.
+ * For a NumericLiteral, the stored value is the toString() representation of the number.
+ * For example 1, 1.00, and 1e0 are all stored as just "1".
+ *
+ * @interface LiteralExpression
+ * @augments {LiteralLikeNode}
+ * @augments {Expression}
+ */
+export interface LiteralExpression extends LiteralLikeNode, Expression {
+  _literalExpressionBrand: any
+}
+
+export interface NumericLiteral extends LiteralExpression, Declaration {
+  kind: SyntaxKind.NumericLiteral
+  /* @internal */
+  numericLiteralFlags: TokenFlags
+}
+
+export interface StringLiteral extends LiteralExpression, Declaration {
+  kind: SyntaxKind.StringLiteral
+
+  /**
+   * Allows a StringLiteral to get its text from another node (used by transforms).
+   *
+   * @type {(Identifier | StringLiteral | NumericLiteral)}
+   * @memberof StringLiteral
+   * @internal
+   */
+  textSourceNode?: Identifier | StringLiteral | NumericLiteral
+
+  /**
+   * Note: this is only set when synthesizing a node, not during parsing.
+   *
+   * @type {boolean}
+   * @memberof StringLiteral
+   * @internal
+   */
+  singleQuote?: boolean
+}
+
+export interface PrefixUnaryExpression extends Expression {
+  kind: SyntaxKind.PrefixUnaryExpression
+  operator: PrefixUnaryOperator
+  operand: UnaryExpression
 }

@@ -72,6 +72,17 @@ describe('parser', () => {
       expect(scanError).toBeDefined()
       expect(lazyScanError).not.toThrow()
     })
+
+    it('should allow to generate sourceFile', () => {
+      // arrange
+      expect.hasAssertions()
+      const parser = new Parser()
+      const { createSourceFile } = parser
+
+      // act
+      // assert
+      expect(createSourceFile).toBeDefined()
+    })
   })
 
   describe('parse', () => {

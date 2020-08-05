@@ -200,6 +200,7 @@ export const enum SyntaxKind {
   // Expression
   ArrayLiteralExpression,
   PrefixUnaryExpression,
+  OmittedExpression,
 
   // Misc
 
