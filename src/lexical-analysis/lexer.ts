@@ -107,6 +107,10 @@ export class LexerImpl implements Lexer {
     this.skipTrivia = lexerOptions?.skipTrivia ?? true
   }
 
+  public static tokenIsIdentifierOrKeyword(token: SyntaxKind): boolean {
+    return token >= SyntaxKind.Identifier
+  }
+
   public getStartPos(): number {
     return this.startPos
   }
