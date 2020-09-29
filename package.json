@@ -24,7 +24,7 @@
     "commitlint": "11.0.0",
     "cz-conventional-changelog": "3.3.0",
     "dtslint": "4.0.2",
-    "eslint": "7.9.0",
+    "eslint": "7.10.0",
     "eslint-config-airbnb-typescript": "10.0.0",
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-import": "2.22.0",
