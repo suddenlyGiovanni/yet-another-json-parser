@@ -2290,10 +2290,10 @@ dts-critic@latest:
     tmp "^0.2.1"
     yargs "^12.0.5"
 
-dtslint@4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/dtslint/-/dtslint-4.0.2.tgz#29dd1cb902648fe5f4c3fe39616c43973e602f61"
-  integrity sha512-vWGZI+QSQ4AQAvJ3T0dnHf+fWqrmx4C0SR0h3Jubi5iBDA6Nsu2Ds+AjqxfiRl6py0yvEZU3T+MqNpKV07CI0A==
+dtslint@4.0.7:
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/dtslint/-/dtslint-4.0.7.tgz#dad7c0de4b2f48bcc5ee79432248cadc7a5a1a38"
+  integrity sha512-gwpBnxky+vUfCL74U5ao+wQf4sw9jD+cZ9ukiTFrkwkhNibqfyOZyg4cnFf1lB0Hm5ZFSQdi09DdjarDQLgofA==
   dependencies:
     "@definitelytyped/header-parser" latest
     "@definitelytyped/typescript-versions" latest
@@ -2303,6 +2303,7 @@ dtslint@4.0.2:
     json-stable-stringify "^1.0.1"
     strip-json-comments "^2.0.1"
     tslint "5.14.0"
+    tsutils "^2.29.0"
     yargs "^15.1.0"
 
 dynamic-dedupe@^0.3.0:
